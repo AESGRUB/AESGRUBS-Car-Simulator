@@ -1,0 +1,2080 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#090d13">
+<meta name="description" content="Build and tune virtual engines, explore automotive engineering, analyze horsepower and torque on the dyno, and test your setup in a fullscreen drag racing simulator. Free browser-based experience by AESGRUBS.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AESGRUBS">
+<meta property="og:title" content="AESGRUBS Car Simulator | Project APEX">
+<meta property="og:description" content="Build virtual engines, explore engine physics, run dyno analysis, and test your setup in a fullscreen drag racing simulator.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AESGRUBS Car Simulator | Project APEX">
+<meta name="twitter:description" content="A free browser-based automotive engineering and drag racing simulator.">
+<title>AESGRUBS Car Simulator | Project APEX</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AESGRUBS Car Simulator",
+  "alternateName": "Project APEX",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any device with a modern web browser",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "INR"
+  },
+  "description": "A free browser-based automotive engineering simulator featuring virtual engine configuration, component upgrades, dyno analysis, engine physics telemetry, and fullscreen drag racing."
+}
+</script>
+<style>
+:root {
+  --bg:#090d13;
+  --panel:#111923;
+  --panel2:#0d141d;
+  --line:#263444;
+  --text:#e8f0f8;
+  --muted:#91a2b6;
+  --cyan:#ff303b;
+  --green:#7cf0b2;
+  --amber:#ffc66d;
+  --red:#ff737e
+}
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at 12% 0%,#321419 0,#090d13 48%),radial-gradient(ellipse at top right,#211117 0,transparent 42%);
+  color:var(--text);
+  font:14px/1.45 "Segoe UI",Arial,sans-serif
+}
+header {
+  padding:22px clamp(16px,4vw,44px) 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  background:#080c12cc
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:14px
+}
+.logo {
+  width:46px;
+  height:46px;
+  border:1px solid var(--cyan);
+  display:grid;
+  place-items:center;
+  color:var(--cyan);
+  font-weight:900;
+  font-size:23px;
+  clip-path:polygon(0 0,100% 0,100% 70%,70% 100%,0 100%)
+}
+h1 {
+  font-size:22px;
+  letter-spacing:2px;
+  margin:0
+}
+.subtitle {
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:2px;
+  margin-top:3px
+}
+.badge {
+  border:1px solid #2b5363;
+  color:var(--cyan);
+  padding:6px 10px;
+  font-size:10px;
+  letter-spacing:1.4px;
+  border-radius:3px
+}
+main {
+  max-width:1450px;
+  margin:auto;
+  padding:22px clamp(14px,3vw,34px) 40px
+}
+.section-title {
+  font-size:12px;
+  color:var(--cyan);
+  letter-spacing:2px;
+  font-weight:700;
+  margin:0 0 13px
+}
+.layout {
+  display:grid;
+  grid-template-columns:minmax(280px, .95fr) minmax(320px,1.3fr);
+  gap:18px
+}
+.panel {
+  background:linear-gradient(145deg,#121c28,#0c121a);
+  border:1px solid #3a2930;
+  border-radius:8px;
+  padding:19px;
+  margin-bottom:18px;
+  box-shadow:0 12px 30px #0004
+}
+.panel-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  gap:10px
+}
+.panel-head h2 {
+  font-size:14px;
+  letter-spacing:1px;
+  margin:0
+}
+.tag {
+  font-size:10px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  padding:4px 7px;
+  border-radius:3px
+}
+label {
+  display:block;
+  color:#bac8d7;
+  font-size:12px;
+  margin:0 0 7px
+}
+select,input[type=number],input[type=text] {
+  width:100%;
+  background:#080e15;
+  color:var(--text);
+  border:1px solid #314254;
+  border-radius:4px;
+  padding:10px;
+  font:inherit;
+  outline:none
+}
+select:focus,input:focus {
+  border-color:var(--cyan)
+}
+.field {
+  margin-bottom:15px
+}
+.row {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+.range-top {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+  color:#bac8d7;
+  font-size:12px
+}
+.range-value {
+  color:var(--cyan);
+  font-weight:700
+}
+input[type=range] {
+  width:100%;
+  accent-color:var(--cyan);
+  cursor:pointer
+}
+.hint {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px
+}
+.divider {
+  border:0;
+  border-top:1px solid var(--line);
+  margin:17px 0
+}
+button {
+  border:1px solid #3a566b;
+  background:#142536;
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:4px;
+  font:600 12px "Segoe UI",Arial;
+  cursor:pointer;
+  transition:.15s
+}
+button:hover {
+  border-color:var(--cyan);
+  transform:translateY(-1px)
+}
+button.primary {
+  background:var(--cyan);
+  border-color:var(--cyan);
+  color:#061018;
+  font-weight:800
+}
+button.secondary {
+  background:#101a25
+}
+button.danger {
+  border-color:#6b343d;
+  color:#ff9ca4
+}
+.actions {
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap
+}
+.actions button {
+  flex:1
+}
+.engine-visual {
+  height:188px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid #4a2930;
+  border-radius:5px;
+  background:linear-gradient(135deg,#100c11,#24141a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:15px
+}
+.engine-visual:before,.engine-visual:after {
+  content:"";
+  position:absolute;
+  background:#ff303b0a;
+  border:1px solid #ff303b15;
+  transform:rotate(-25deg);
+  width:260px;
+  height:260px
+}
+.engine-visual:after {
+  width:170px;
+  height:170px
+}
+.engine-block {
+  position:relative;
+  z-index:1;
+  width:155px;
+  height:91px;
+  border:2px solid #7e94a9;
+  border-radius:9px;
+  background:linear-gradient(135deg,#34485a,#111b27);
+  box-shadow:0 10px 22px #0009;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  padding:12px
+}
+.cylinder {
+  border:1px solid #9eafbf;
+  background:linear-gradient(#536a7d,#182735);
+  border-radius:4px;
+  position:relative
+}
+.cylinder:after {
+  content:"";
+  position:absolute;
+  left:20%;
+  right:20%;
+  height:6px;
+  top:9px;
+  background:var(--cyan);
+  opacity:.7;
+  border-radius:4px
+}
+.engine-label {
+  position:absolute;
+  bottom:10px;
+  left:13px;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:1.5px
+}
+.engine-code {
+  position:absolute;
+  top:10px;
+  right:13px;
+  color:var(--cyan);
+  font-weight:700;
+  font-size:11px;
+  letter-spacing:1px
+}
+.metrics {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:14px
+}
+.metric {
+  background:#09111a;
+  border:1px solid #223343;
+  border-radius:5px;
+  padding:12px
+}
+.metric .name {
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1px
+}
+.metric .value {
+  font-size:25px;
+  font-weight:800;
+  margin-top:4px;
+  letter-spacing:-1px
+}
+.metric .unit {
+  font-size:11px;
+  color:var(--muted);
+  font-weight:500;
+  letter-spacing:0
+}
+.metric.hp .value {
+  color:var(--cyan)
+}
+.metric.tq .value {
+  color:var(--green)
+}
+.metric.rpm .value {
+  color:var(--amber)
+}
+.chart-wrap {
+  height:270px;
+  background:#080e15;
+  border:1px solid #4a2930;
+  border-radius:5px;
+  position:relative;
+  padding:8px
+}
+.chart-wrap canvas {
+  width:100%;
+  height:100%;
+  display:block
+}
+.legend {
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:10px
+}
+.dot {
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  margin-right:6px
+}
+.status {
+  color:var(--green);
+  font-size:11px
+}
+.specs {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+.spec {
+  padding:10px;
+  background:#0a1119;
+  border:1px solid #1f2e3c;
+  border-radius:4px
+}
+.spec span {
+  display:block;
+  color:var(--muted);
+  font-size:10px
+}
+.spec strong {
+  display:block;
+  margin-top:4px;
+  font-size:13px
+}
+.notice {
+  color:#9fb0c2;
+  font-size:11px;
+  line-height:1.55;
+  padding:11px;
+  border-left:2px solid var(--amber);
+  background:#ffc66d0b;
+  margin-top:14px
+}
+footer {
+  max-width:1450px;
+  margin:auto;
+  padding:0 24px 25px;
+  color:#607386;
+  font-size:10px;
+  letter-spacing:.5px
+}
+@media(max-width:850px) {
+  .layout {
+    grid-template-columns:1fr
+  }
+  .metrics {
+    grid-template-columns:repeat(3,1fr)
+  }
+  .physics-metrics { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:440px) {
+  .row {
+    grid-template-columns:1fr
+  }
+  .metrics {
+    grid-template-columns:1fr
+  }
+  .metric .value {
+    font-size:22px
+  }
+}
+input[type="text"] { width:100%; background:#0a1119; color:var(--text); border:1px solid var(--line); border-radius:4px; padding:10px; font:inherit; }
+button:disabled { opacity:.55; cursor:default; transform:none; }
+input[type=color] { width:100%; height:40px; padding:3px; background:#080e15; border:1px solid #314254; border-radius:4px; cursor:pointer; }
+#dragPanel { display:none !important; }
+.drag-wrap { display:none; height:clamp(250px,36vw,340px); border:1px solid #4a2930; border-radius:6px; overflow:hidden; background:#0b0710; margin-bottom:14px; cursor:pointer; touch-action:manipulation; user-select:none; }
+.drag-wrap canvas { width:100%; height:100%; display:block; }
+.drag-metrics { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:12px; }
+.drag-metrics .metric .value { font-size:21px; }
+.drag-msg { margin:0 0 4px; font-size:12px; color:var(--text); }
+/* ---- fullscreen / mobile game mode ---- */
+.drag-wrap { position:relative; }
+.fs-ui { display:none; position:absolute; inset:0; pointer-events:none; }
+.drag-wrap.fs { display:block; position:fixed; inset:0; width:100vw; height:100vh; height:100dvh; z-index:9999; margin:0; border:0; border-radius:0; touch-action:none; background:#0b0710; }
+.drag-wrap.fs .fs-ui { display:block; }
+body.fs-lock { overflow:hidden; }
+.fs-btn { pointer-events:auto; position:absolute; font:800 14px "Segoe UI",Arial; color:#fff; background:rgba(12,16,24,.72); border:1.5px solid rgba(255,255,255,.35); backdrop-filter:blur(4px); -webkit-tap-highlight-color:transparent; touch-action:manipulation; user-select:none; -webkit-user-select:none; }
+.fs-mini { width:42px; height:42px; border-radius:50%; font-size:17px; padding:0; top:max(10px,env(safe-area-inset-top)); }
+.fs-exit { right:max(12px,env(safe-area-inset-right)); }
+.fs-snd { right:calc(max(12px,env(safe-area-inset-right)) + 52px); }
+.fs-tunebtn { right:calc(max(12px,env(safe-area-inset-right)) + 104px); }
+.fs-round { border-radius:50%; padding:0; letter-spacing:1px; bottom:max(22px,env(safe-area-inset-bottom)); }
+.fs-go { right:max(22px,env(safe-area-inset-right)); width:clamp(96px,26vh,150px); height:clamp(96px,26vh,150px); font-size:clamp(15px,4.2vh,24px); background:rgba(255,48,59,.92); border-color:#ffb1b6; box-shadow:0 0 28px rgba(255,48,59,.55); }
+.fs-go:active, .fs-rev:active { transform:scale(.94); }
+.fs-go:disabled { opacity:.45; box-shadow:none; }
+.fs-rev { left:max(22px,env(safe-area-inset-left)); width:clamp(72px,19vh,108px); height:clamp(72px,19vh,108px); font-size:clamp(14px,3.6vh,20px); }
+.fs-tune { pointer-events:auto; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(560px,92%); max-height:92%; overflow:auto; background:rgba(10,14,20,.97); border:1px solid #4a2930; border-radius:10px; padding:14px; display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; }
+.fs-down { display:none; right:calc(max(22px,env(safe-area-inset-right)) + clamp(96px,26vh,150px) + 14px); width:clamp(56px,14vh,80px); height:clamp(56px,14vh,80px); font-size:clamp(16px,3.4vh,22px); }
+.drag-wrap.manual .fs-down { display:block; }
+.fs-tune[hidden] { display:none; }
+.fs-tune label { margin-bottom:4px; }
+.fs-wide { grid-column:1 / -1; }
+.fs-done { position:static; height:40px; border-radius:6px; background:#ff303b; color:#061018; }
+.fs-rotate { display:none; pointer-events:auto; position:absolute; inset:0; background:rgba(8,6,14,.94); color:#e8f0f8; text-align:center; align-items:center; justify-content:center; font:700 17px "Segoe UI",Arial; z-index:5; }
+@media (orientation:portrait) { .drag-wrap.fs .fs-rotate { display:flex; } }
+.play-fab { display:none; position:fixed; right:14px; bottom:max(14px,env(safe-area-inset-bottom)); z-index:60; padding:14px 18px; border-radius:30px; background:var(--cyan); border:0; color:#061018; font:800 14px "Segoe UI",Arial; letter-spacing:1px; box-shadow:0 6px 22px #ff303b66; }
+@media (max-width:850px), (pointer:coarse) { .play-fab { display:block; } }
+body.fs-lock .play-fab { display:none; }
+@media(max-width:850px) { .drag-metrics { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:440px) { .drag-metrics { grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">A</div>
+      <div>
+        <h1>AESGRUBS</h1>
+        <div class="subtitle">CAR SIMULATOR / PROJECT APEX · BUILD 1.0</div>
+      </div>
+    </div>
+    <div class="badge">● LOCAL SIMULATION ONLINE</div>
+  </header>
+  <main>
+    <div class="layout">
+      <section>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>01 / ENGINE CONFIGURATION</h2>
+            <span class="tag">BUILDER</span>
+          </div>
+          <div class="engine-visual">
+            <div class="engine-code" id="engineCode">I4 · 2.0L</div>
+            <div class="engine-block" id="engineBlock">
+              <i class="cylinder">
+              </i>
+              <i class="cylinder">
+              </i>
+              <i class="cylinder">
+              </i>
+              <i class="cylinder">
+              </i>
+            </div>
+            <div class="engine-label">CONCEPTUAL ENGINE VISUALIZATION</div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="layout">Engine layout</label>
+              <select id="layout">
+                <optgroup label="INLINE ENGINES">
+                  <option value="I3">Inline-3</option>
+                  <option value="I4" selected>Inline-4</option>
+                  <option value="I5">Inline-5</option>
+                  <option value="I6">Inline-6</option>
+                  <option value="I8">Inline-8</option>
+                </optgroup>
+                <optgroup label="V ENGINES">
+                  <option value="V4">V4</option>
+                  <option value="V5">V5</option>
+                  <option value="V6">V6</option>
+                  <option value="V8">V8</option>
+                  <option value="V10">V10</option>
+                  <option value="V12">V12</option>
+                </optgroup>
+                <optgroup label="FLAT / BOXER ENGINES">
+                  <option value="F4">Flat-4 Boxer</option>
+                  <option value="F6">Flat-6 Boxer</option>
+                </optgroup>
+                <optgroup label="ODD ARCHITECTURES">
+                  <option value="VR6">VR6 Narrow-Angle</option>
+                  <option value="W8">W8</option>
+                  <option value="W12">W12</option>
+                  <option value="W16">W16</option>
+                </optgroup>
+                <optgroup label="ROTARY ENGINES">
+                  <option value="R2">2-Rotor Wankel</option>
+                  <option value="R3">3-Rotor Wankel</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="field">
+              <label for="displacement">Displacement (L)</label>
+              <input id="displacement" type="number" min="0.8" max="16.0" step="0.1" value="2.0">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="induction">Induction system</label>
+              <select id="induction">
+                <option value="na">Naturally aspirated</option>
+                <option value="turbo">Single turbo</option>
+                <option value="twin">Twin-turbo</option>
+                <option value="sequential">Sequential twin-turbo</option>
+                <option value="super">Supercharged</option>
+                <option value="twincharge">Twincharged (turbo + supercharger)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="fuel">Fuel / calibration</label>
+              <select id="fuel">
+                <option value="pump">Pump gasoline · standard calibration</option>
+                <option value="premium">High-octane gasoline</option>
+                <option value="eco">Economy calibration</option>
+                <option value="e85">E85 / flex-fuel calibration</option>
+                <option value="race">Race fuel delivery</option>
+                <option value="methanol">Methanol competition setup</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <div class="range-top">
+              <label for="redline">Redline</label>
+              <span class="range-value" id="redlineOut">7,000 RPM</span>
+            </div>
+            <input id="redline" type="range" min="4500" max="9000" step="100" value="7000">
+          </div>
+          <div class="field" id="boostField" hidden>
+            <div class="range-top">
+              <label for="boost">Boost pressure</label>
+              <span class="range-value" id="boostOut">10 PSI</span>
+            </div>
+            <input id="boost" type="range" min="0" max="25" step="1" value="10">
+            <div class="hint">Simplified pressure input; real safe boost depends on the whole engine system.</div>
+          </div>
+          <div class="field">
+            <div class="range-top">
+              <label for="ecu">ECU calibration</label>
+              <span class="range-value" id="ecuOut">100%</span>
+            </div>
+            <input id="ecu" type="range" min="85" max="110" step="1" value="100">
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>02 / COMPONENTS</h2>
+            <span class="tag">UPGRADES</span>
+          </div>
+          <div class="field">
+            <label for="intake">Intake system</label>
+            <select id="intake">
+              <option value="stock">Stock intake</option>
+              <option value="sport">Performance intake</option>
+              <option value="race">Low-restriction race intake</option>
+              <option value="itb">Individual throttle bodies (ITBs)</option>
+              <option value="ram">Ram-air / tuned intake</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="exhaust">Exhaust system</label>
+            <select id="exhaust">
+              <option value="stock">Stock exhaust</option>
+              <option value="sport">Performance exhaust</option>
+              <option value="race">Low-restriction race exhaust</option>
+              <option value="headers">Equal-length performance headers</option>
+              <option value="open">Competition open exhaust</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cooling">Cooling package</label>
+            <select id="cooling">
+              <option value="stock">Stock cooling</option>
+              <option value="upgraded">Upgraded radiator</option>
+              <option value="track">Track cooling package</option>
+              <option value="race">Race radiator + high-flow pump</option>
+              <option value="oil">Engine oil cooler package</option>
+            </select>
+          </div>
+          <div class="field" id="intercoolerField" hidden>
+            <label for="intercooler">Charge-air cooling</label>
+            <select id="intercooler">
+              <option value="stock">Basic intercooler</option>
+              <option value="good">High-efficiency intercooler</option>
+              <option value="large">Large intercooler</option>
+              <option value="water">Water-to-air intercooler</option>
+              <option value="ice">Competition ice-water system</option>
+            </select>
+          </div>
+          <hr class="divider">
+          <div class="panel-head"><h2>PARTS TUNING</h2><span class="tag">LIVE SETUP</span></div>
+          <div class="field" id="turboSizeField" hidden>
+            <div class="range-top"><label for="turboSize">Turbo sizing</label><span class="range-value" id="turboSizeOut">50%</span></div>
+            <input id="turboSize" type="range" min="0" max="100" step="5" value="50">
+            <div class="hint">Smaller favors response; larger favors high-RPM flow in this simplified model.</div>
+          </div>
+          <div class="field" id="boostResponseField" hidden>
+            <div class="range-top"><label for="boostResponse">Boost response</label><span class="range-value" id="boostResponseOut">50%</span></div>
+            <input id="boostResponse" type="range" min="0" max="100" step="5" value="50">
+          </div>
+          <div class="field">
+            <div class="range-top"><label for="intakeFlow">Intake flow</label><span class="range-value" id="intakeFlowOut">50%</span></div>
+            <input id="intakeFlow" type="range" min="0" max="100" step="5" value="50">
+          </div>
+          <div class="field">
+            <div class="range-top"><label for="exhaustFlow">Exhaust flow</label><span class="range-value" id="exhaustFlowOut">50%</span></div>
+            <input id="exhaustFlow" type="range" min="0" max="100" step="5" value="50">
+          </div>
+          <div class="field">
+            <div class="range-top"><label for="coolingCapacity">Cooling capacity</label><span class="range-value" id="coolingCapacityOut">50%</span></div>
+            <input id="coolingCapacity" type="range" min="0" max="100" step="5" value="50">
+          </div>
+          <div class="hint">These sliders are simulator tuning controls, not real-world safe setup specifications.</div>
+          <hr class="divider">
+          <div class="actions">
+            <button class="primary" id="runBtn">▶ RUN DYNO PULL</button>
+            <button class="secondary" id="saveBtn">SAVE BUILD</button>
+            <button class="secondary" id="loadBtn">LOAD BUILD</button>
+            <button class="danger" id="resetBtn">RESET</button>
+          </div>
+          <div class="hint" id="saveStatus" aria-live="polite">Build settings are stored in this browser only.</div>
+          <hr class="divider">
+          <div class="panel-head"><h2>06 / BUILD GARAGE</h2><span class="tag">PRESETS + CUSTOM</span></div>
+          <div class="field">
+            <label for="presetSelect">Load a preset or saved build</label>
+            <select id="presetSelect"><option value="">Select a build…</option></select>
+          </div>
+          <div class="field">
+            <label for="presetName">Build name</label>
+            <input id="presetName" type="text" maxlength="40" placeholder="e.g. F40 LEGEND">
+          </div>
+          <div class="actions">
+            <button class="primary" id="loadPresetBtn">LOAD SELECTED</button>
+            <button class="secondary" id="savePresetBtn">SAVE AS NEW</button>
+            <button class="danger" id="deletePresetBtn">DELETE SAVED</button>
+          </div>
+          <div class="hint" id="presetStatus" aria-live="polite">Built-in presets are ready. Custom builds stay in this browser.</div>
+        </div>
+      </section>
+      <section>
+        <div class="panel" id="dragPanel">
+          <div class="panel-head">
+            <h2>★ DRAG STRIP</h2>
+            <span class="tag">GAME MODE</span>
+          </div>
+          
+          <div class="drag-metrics">
+            <div class="metric hp"><div class="name">ET · 1/4 MILE</div><div class="value" id="dragEt">—</div><div class="unit">sec</div></div>
+            <div class="metric tq"><div class="name">0–60 MPH</div><div class="value" id="dragSixty">—</div><div class="unit">sec</div></div>
+            <div class="metric rpm"><div class="name">TRAP SPEED</div><div class="value" id="dragTrap">—</div><div class="unit">mph</div></div>
+            <div class="metric"><div class="name">REACTION</div><div class="value" id="dragRt">—</div><div class="unit">sec</div></div>
+            <div class="metric"><div class="name">PERSONAL BEST</div><div class="value" id="dragBest">—</div><div class="unit">sec</div></div>
+          </div>
+          <div class="notice drag-msg" id="dragMsg" aria-live="polite">Hit SPACE or tap the strip to stage. The engine from your build panel is the one on the line.</div>
+          <div class="actions" style="margin:14px 0">
+            <button class="primary" id="dragLaunchBtn">▶ STAGE &amp; LAUNCH</button>
+            <button class="secondary" id="dragRevBtn">HOLD TO REV (R)</button>
+            <button class="secondary" id="dragSoundBtn">🔊 SOUND ON</button>
+            <button class="secondary" id="dragFsBtn">⛶ FULLSCREEN (F)</button>
+          </div>
+          <div class="row">
+            <div class="field">
+              <div class="range-top"><label for="dragWeight">Car weight</label><span class="range-value" id="dragWeightOut">3,000 lb</span></div>
+              <input id="dragWeight" type="range" min="1800" max="5500" step="50" value="3000">
+            </div>
+            <div class="field">
+              <label for="dragPaint">Paint</label>
+              <input id="dragPaint" type="color" value="#ff303b">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="dragGear">Gearing</label>
+              <select id="dragGear">
+                <option value="short">Short · launches hard</option>
+                <option value="balanced" selected>Balanced</option>
+                <option value="tall">Tall · higher top speed</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="dragTires">Tires</label>
+              <select id="dragTires">
+                <option value="street" selected>Street tires</option>
+                <option value="sport">Sport tires</option>
+                <option value="slick">Drag slicks</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="dragTrans">Transmission</label>
+              <select id="dragTrans">
+                <option value="manual" selected>Manual · you shift</option>
+                <option value="auto">Automatic</option>
+              </select>
+            </div>
+          </div>
+          <div class="hint">SPACE or tap = stage, then hit it again the instant the tree goes green. Jump the light and it's a red-light foul. <b>Manual:</b> SPACE / ↑ / E / tap = upshift, ↓ / Q = downshift. Shift when the lights go blue for a PERFECT shift (fastest). Wait too long and you bounce off the limiter. Hold R to rev. Simplified physics: dyno torque → gearing → traction → drag.</div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>03 / DYNO TELEMETRY</h2>
+            <span class="status" id="dynoStatus">● READY</span>
+          </div>
+          <div class="metrics">
+            <div class="metric hp">
+              <div class="name">PEAK POWER</div>
+              <div class="value" id="peakHp">—</div>
+              <div class="unit">hp</div>
+            </div>
+            <div class="metric tq">
+              <div class="name">PEAK TORQUE</div>
+              <div class="value" id="peakTq">—</div>
+              <div class="unit">lb-ft</div>
+            </div>
+            <div class="metric rpm">
+              <div class="name">POWER PEAK</div>
+              <div class="value" id="peakRpm">—</div>
+              <div class="unit">RPM</div>
+            </div>
+          </div>
+          <div class="row" style="margin:0 0 12px">
+            <div class="field" style="margin:0"><label for="chartMode">Graph overlay</label><select id="chartMode"><option value="both">Horsepower + torque</option><option value="hp">Horsepower only</option><option value="torque">Torque only</option></select></div>
+            <div class="field" style="margin:0;display:flex;align-items:end"><button class="secondary" id="exportCsvBtn" style="width:100%">EXPORT DYNO CSV</button></div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="dynoChart" aria-label="Dyno horsepower and torque curves">
+            </canvas>
+          </div>
+          <div class="legend">
+            <span>
+              <i class="dot" style="background:#ff303b">
+              </i>Horsepower (hp)</span>
+              <span>
+                <i class="dot" style="background:#7cf0b2">
+                </i>Torque (lb-ft)</span>
+              </div>
+              <div class="hint">The chart is generated from the current configuration. Run the dyno again after changing parts.</div>
+              <div class="row" style="margin-top:14px">
+                <div class="metric"><div class="name">90% POWER BAND</div><div class="value" id="powerBand">—</div><div class="unit">RPM range</div></div>
+                <div class="metric"><div class="name">EST. AIRFLOW</div><div class="value" id="dynoAirflow">—</div><div class="unit">CFM · estimated at redline</div></div>
+              </div>
+              <div class="hint" id="dynoInsight">Run a pull to calculate the power band and exportable data.</div>
+            </div>
+            <div class="panel" id="engineeringPanel">
+              <div class="panel-head">
+                <h2>04 / ENGINEERING LIVE BAY</h2>
+                <span class="tag">LIVE RPM + BOOST</span>
+              </div>
+              <div class="hint" style="margin:0 0 12px">Sweep the engine through its RPM range and watch the modeled output. Turbo boost delivery responds to turbo sizing, boost response, and engine speed.</div>
+              <div class="metrics">
+                <div class="metric rpm"><div class="name">LIVE RPM</div><div class="value" id="liveRpmOut">1,000</div><div class="unit">RPM</div></div>
+                <div class="metric hp"><div class="name">LIVE POWER</div><div class="value" id="liveHpOut">—</div><div class="unit">hp</div></div>
+                <div class="metric tq"><div class="name">LIVE TORQUE</div><div class="value" id="liveTqOut">—</div><div class="unit">lb-ft</div></div>
+              </div>
+              <div class="field">
+                <div class="range-top"><label for="liveRpm">RPM sweep control</label><span class="range-value" id="liveRpmLabel">1,000 RPM</span></div>
+                <input id="liveRpm" type="range" min="1000" max="7000" step="100" value="1000">
+              </div>
+              <div class="actions" style="margin-top:10px">
+                <button class="primary" id="sweepBtn">▶ START RPM SWEEP</button>
+                <button class="secondary" id="stopSweepBtn">■ STOP / HOLD</button>
+                <button class="secondary" id="syncRpmBtn">SYNC TO REDLINE</button>
+              </div>
+              <div class="panel-head" style="margin-top:18px"><h2>INDUCTION BOOST DELIVERY CURVE</h2><span class="tag">MODEL PSI</span></div>
+              <div class="chart-wrap" style="height:220px"><canvas id="boostChart" aria-label="Modeled turbo boost delivery across RPM"></canvas></div>
+              <div class="hint" id="engineeringInsight">Run the dyno to inspect the current setup. NA configurations show no boost curve; superchargers build near-immediate modeled boost.</div>
+              <div class="hint">Engineering interactions: intake/exhaust flow balance affects breathing efficiency; high boost with low cooling capacity applies a small modeled heat penalty. This is illustrative, not a validated engine model.</div>
+            </div>
+            <div class="panel" id="physicsPanel">
+              <div class="panel-head">
+                <h2>05 / ENGINE PHYSICS TELEMETRY</h2>
+                <span class="tag">BMEP · FIRING · DISPLACEMENT</span>
+              </div>
+              <div class="metrics physics-metrics">
+                <div class="metric tq">
+                  <div class="name">LIVE BMEP</div>
+                  <div class="value" id="physicsBmep">—</div>
+                  <div class="unit" id="physicsBmepUnit">psi</div>
+                </div>
+                <div class="metric rpm">
+                  <div class="name">TORQUE PEAK</div>
+                  <div class="value" id="physicsTorquePeak">—</div>
+                  <div class="unit">RPM</div>
+                </div>
+                <div class="metric hp">
+                  <div class="name">FIRING EVENTS</div>
+                  <div class="value" id="physicsFiringRate">—</div>
+                  <div class="unit" id="physicsFiringUnit">per second at live RPM</div>
+                </div>
+                <div class="metric">
+                  <div class="name">MANIFOLD PRESSURE</div>
+                  <div class="value" id="physicsPressureRatio">—</div>
+                  <div class="unit">× atmospheric pressure</div>
+                </div>
+              </div>
+              <div class="specs">
+                <div class="spec"><span>ARCHITECTURE PROFILE</span><strong id="physicsArchitecture">—</strong></div>
+                <div class="spec"><span>DISPLACEMENT</span><strong id="physicsDisplacement">—</strong></div>
+              </div>
+              <div class="hint" id="physicsNote" style="margin-top:12px">The model uses displacement and BMEP to set torque, then derives horsepower from torque and RPM.</div>
+              <div class="hint">Core relationship (4-stroke piston engines): Torque (lb-ft) ≈ BMEP (psi) × displacement (in³) ÷ 150.8. Horsepower = torque (lb-ft) × RPM ÷ 5,252. Layout profiles are illustrative curve assumptions, not universal rules for every engine.</div>
+            </div>
+            <div class="panel" id="comparePanel">
+              <div class="panel-head">
+                <h2>07 / BUILD COMPARISON</h2>
+                <span class="tag">A / B TEST</span>
+              </div>
+              <div class="hint" style="margin:0 0 12px">Capture one build as A, change your setup, run the dyno, then compare the current setup as B. Both use the same simplified model.</div>
+              <div class="row">
+                <div class="spec">
+                  <span>BUILD A</span>
+                  <strong id="compareAName">Not captured</strong>
+                  <div class="hint" id="compareAStats">Capture a reference build.</div>
+                </div>
+                <div class="spec">
+                  <span>BUILD B · CURRENT</span>
+                  <strong id="compareBName">Not run yet</strong>
+                  <div class="hint" id="compareBStats">Run the dyno after changing settings.</div>
+                </div>
+              </div>
+              <div class="actions" style="margin-top:12px">
+                <button class="secondary" id="captureABtn">CAPTURE CURRENT AS A</button>
+                <button class="primary" id="compareBtn">COMPARE A vs CURRENT</button>
+                <button class="secondary" id="clearCompareBtn">CLEAR</button>
+              </div>
+              <div class="chart-wrap" style="margin-top:14px;height:245px">
+                <canvas id="compareChart" aria-label="Build A and Build B horsepower comparison">
+                </canvas>
+              </div>
+              <div class="legend">
+                <span>
+                  <i class="dot" style="background:#ff303b">
+                  </i>Build A · horsepower</span>
+                  <span>
+                    <i class="dot" style="background:#7cf0b2">
+                    </i>Build B · horsepower</span>
+                  </div>
+                  <div class="hint" id="compareStatus" aria-live="polite">Capture Build A to begin a comparison.</div>
+                </div>
+                <div class="panel">
+                  <div class="panel-head">
+                    <h2>08 / BUILD SUMMARY</h2>
+                    <span class="tag">LIVE CONFIG</span>
+                  </div>
+                  <div class="specs">
+                    <div class="spec">
+                      <span>ENGINE</span>
+                      <strong id="sumEngine">2.0L Inline-4</strong>
+                    </div>
+                    <div class="spec">
+                      <span>INDUCTION</span>
+                      <strong id="sumInduction">Naturally aspirated</strong>
+                    </div>
+                    <div class="spec">
+                      <span>ESTIMATED AIRFLOW</span>
+                      <strong id="sumAir">—</strong>
+                    </div>
+                    <div class="spec">
+                      <span>COOLING CAPACITY</span>
+                      <strong id="sumCooling">Stock</strong>
+                    </div>
+                    <div class="spec">
+                      <span>INTAKE / EXHAUST</span>
+                      <strong id="sumBreathing">Stock / Stock</strong>
+                    </div>
+                    <div class="spec">
+                      <span>BUILD STATUS</span>
+                      <strong id="sumStatus">Ready for dyno</strong>
+                    </div>
+                  </div>
+                  <div class="notice">
+                    <strong>Simulation note:</strong> V1.0 uses a BMEP-based torque estimate and derives horsepower from torque and RPM. Architecture profiles, fuel calibrations, airflow, boost delivery, and component effects are still simplified assumptions—not validated engine-design software or real-world predictions. Rotary displacement conventions differ, so rotary comparisons are especially approximate.</div>
+                  </div>
+                </section>
+              </div>
+            </main>
+<div class="drag-wrap" id="dragWrap" aria-label="Fullscreen drag racing game">
+            <canvas id="dragCanvas" aria-label="Animated drag strip with tachometer and boost gauges"></canvas>
+            <div class="fs-ui" id="fsUi">
+              <button class="fs-btn fs-mini fs-exit" id="fsExit" aria-label="Exit fullscreen">✕</button>
+              <button class="fs-btn fs-mini fs-snd" id="fsSnd" aria-label="Toggle sound">🔊</button>
+              <button class="fs-btn fs-mini fs-tunebtn" id="fsTuneBtn" aria-label="Tune build">⚙</button>
+              <button class="fs-btn fs-round fs-rev" id="fsRev">REV</button>
+              <button class="fs-btn fs-round fs-go" id="fsGo">▶ STAGE</button>
+              <button class="fs-btn fs-round fs-down" id="fsDown" aria-label="Downshift">▼</button>
+              <div class="fs-tune" id="fsTune" hidden>
+                <div><label for="fsPreset">Build</label><select id="fsPreset"></select></div>
+                <div><label for="fsGearSel">Gearing</label><select id="fsGearSel"><option value="short">Short · launches hard</option><option value="balanced">Balanced</option><option value="tall">Tall · top speed</option></select></div>
+                <div><label for="fsTiresSel">Tires</label><select id="fsTiresSel"><option value="street">Street tires</option><option value="sport">Sport tires</option><option value="slick">Drag slicks</option></select></div>
+                <div><label for="fsPaintIn">Paint</label><input id="fsPaintIn" type="color" value="#ff303b"></div>
+                <div><label for="fsTransSel">Transmission</label><select id="fsTransSel"><option value="manual">Manual · you shift</option><option value="auto">Automatic</option></select></div>
+                <div class="fs-wide"><label for="fsWeightIn">Car weight · <b id="fsWeightOut">3,000 lb</b></label><input id="fsWeightIn" type="range" min="1800" max="5500" step="50" value="3000"></div>
+                <button class="fs-btn fs-done fs-wide" id="fsTuneClose">DONE</button>
+              </div>
+              <div class="fs-rotate" id="fsRotate"><div><div style="font-size:54px">📱↻</div><div>Rotate your phone to landscape</div></div></div>
+            </div>
+          </div>
+            <button class="play-fab" id="playFab" aria-label="Test drag race in fullscreen">🏁 TEST DRAG RACE</button>
+            <footer>AESGRUBS CAR SIMULATOR · PROJECT APEX · BUILD 1.0 · ENGINE PHYSICS MODEL · BMEP + ARCHITECTURE</footer>
+<script>
+// ---------- 1. DOM helper and engine data ----------
+const $ = id => document.getElementById(id);
+const layouts = {
+    I3:  { name:"Inline-3", cyl:3, redline:6800, code:"I3", peakTorque:0.40, topEndDrop:0.29, character:"low-to-mid-range" },
+    I4:  { name:"Inline-4", cyl:4, redline:7000, code:"I4", peakTorque:0.42, topEndDrop:0.25, character:"mid-range" },
+    I5:  { name:"Inline-5", cyl:5, redline:6800, code:"I5", peakTorque:0.44, topEndDrop:0.22, character:"mid-range" },
+    I6:  { name:"Inline-6", cyl:6, redline:7200, code:"I6", peakTorque:0.46, topEndDrop:0.20, character:"broad mid-to-high-range" },
+    I8:  { name:"Inline-8", cyl:8, redline:6200, code:"I8", peakTorque:0.45, topEndDrop:0.22, character:"broad mid-range" },
+    V4:  { name:"V4", cyl:4, redline:6800, code:"V4", peakTorque:0.41, topEndDrop:0.25, character:"low-to-mid-range" },
+    V5:  { name:"V5", cyl:5, redline:6800, code:"V5", peakTorque:0.43, topEndDrop:0.23, character:"mid-range" },
+    V6:  { name:"V6", cyl:6, redline:6800, code:"V6", peakTorque:0.44, topEndDrop:0.22, character:"mid-range" },
+    V8:  { name:"V8", cyl:8, redline:6600, code:"V8", peakTorque:0.46, topEndDrop:0.20, character:"broad mid-range" },
+    V10: { name:"V10", cyl:10, redline:8500, code:"V10", peakTorque:0.51, topEndDrop:0.16, character:"high-revving" },
+    V12: { name:"V12", cyl:12, redline:7800, code:"V12", peakTorque:0.49, topEndDrop:0.17, character:"broad high-range" },
+    F4:  { name:"Flat-4 Boxer", cyl:4, redline:7200, code:"F4", peakTorque:0.43, topEndDrop:0.23, character:"mid-range" },
+    F6:  { name:"Flat-6 Boxer", cyl:6, redline:7600, code:"F6", peakTorque:0.47, topEndDrop:0.19, character:"broad high-range" },
+    VR6: { name:"VR6 Narrow-Angle", cyl:6, redline:6800, code:"VR6", peakTorque:0.44, topEndDrop:0.22, character:"mid-range" },
+    W8:  { name:"W8", cyl:8, redline:6500, code:"W8", peakTorque:0.46, topEndDrop:0.20, character:"broad mid-range" },
+    W12: { name:"W12", cyl:12, redline:6800, code:"W12", peakTorque:0.48, topEndDrop:0.18, character:"broad high-range" },
+    W16: { name:"W16", cyl:16, redline:7000, code:"W16", peakTorque:0.49, topEndDrop:0.18, character:"broad high-range" },
+    R2:  { name:"2-Rotor Wankel", cyl:2, rotors:2, rotary:true, redline:9000, code:"2R", peakTorque:0.55, topEndDrop:0.15, character:"high-revving rotary" },
+    R3:  { name:"3-Rotor Wankel", cyl:3, rotors:3, rotary:true, redline:9000, code:"3R", peakTorque:0.56, topEndDrop:0.14, character:"high-revving rotary" }
+};
+const initial = {
+    layout:"I4",displacement:2.0,induction:"na",fuel:"pump",redline:7000,boost:10,ecu:100,intake:"stock",exhaust:"stock",cooling:"stock",intercooler:"stock",turboSize:50,boostResponse:50,intakeFlow:50,exhaustFlow:50,coolingCapacity:50
+}
+;
+let lastResults = null;
+let buildA = null;
+let compareResults = null;
+function readConfig() {
+    return {
+        layout:$("layout").value,displacement:clamp(Number($("displacement").value)||2,0.8,16),induction:$("induction").value,fuel:$("fuel").value,redline:Number($("redline").value),boost:Number($("boost").value),ecu:Number($("ecu").value),intake:$("intake").value,exhaust:$("exhaust").value,cooling:$("cooling").value,intercooler:$("intercooler").value,turboSize:Number($("turboSize").value),boostResponse:Number($("boostResponse").value),intakeFlow:Number($("intakeFlow").value),exhaustFlow:Number($("exhaustFlow").value),coolingCapacity:Number($("coolingCapacity").value)
+    }
+    ;
+}
+function clamp(v,min,max) {
+    return Math.min(max,Math.max(min,v))
+}
+function factors(c) {
+    // Fuel values are calibration assumptions for this simulator, not universal fuel properties.
+    const fuelBmep = { pump:142, premium:147, eco:130, e85:151, race:154, methanol:145 }[c.fuel] || 142;
+    const intakeHardware = { stock:1.000, sport:1.006, race:1.014, itb:1.010, ram:1.008 }[c.intake] || 1;
+    const exhaustHardware = { stock:1.000, sport:1.006, race:1.014, headers:1.010, open:1.012 }[c.exhaust] || 1;
+    const coolingPackage = { stock:0.38, upgraded:0.58, track:0.76, race:0.88, oil:0.64 }[c.cooling] ?? 0.38;
+    const intercoolerEffectiveness = { stock:0.72, good:0.84, large:0.88, water:0.91, ice:0.94 }[c.intercooler] ?? 0.72;
+    const flowAverage = (c.intakeFlow + c.exhaustFlow) / 2;
+    const flowQuality = 0.985 + (flowAverage / 100) * 0.03;
+    const flowMatch = 1 - Math.abs(c.intakeFlow - c.exhaustFlow) * 0.00015;
+    const ecuCalibration = 1 + (c.ecu - 100) * 0.002;
+    const baseBmepPsi = fuelBmep * intakeHardware * exhaustHardware * flowQuality * flowMatch * ecuCalibration;
+    const coolingScore = clamp((c.coolingCapacity / 100) * 0.65 + coolingPackage * 0.35, 0, 1);
+    return { baseBmepPsi, intercoolerEffectiveness, coolingScore };
+}
+
+// ---------- V1.0 ENGINE PHYSICS MODEL ----------
+// Torque is calculated from BMEP and swept volume. Horsepower is then derived from torque and RPM.
+// Architecture changes the illustrative torque-curve character and firing cadence, not a fake
+// blanket torque multiplier. This is a concept model, not a validated engine simulation.
+function simulate(c) {
+    const eng = layouts[c.layout] || layouts.I4;
+    const f = factors(c);
+    const displacementCi = c.displacement * 61.0237441;
+    const torqueAtPeakBMEP = f.baseBmepPsi * displacementCi / 150.8;
+    const torquePeakRpm = c.redline * eng.peakTorque;
+    const riseTau = Math.max(500, torquePeakRpm * 0.62);
+    const riseAtPeak = 1 - Math.exp(-torquePeakRpm / riseTau);
+    const turboLike = ["turbo", "twin", "sequential", "twincharge"].includes(c.induction);
+    const points = [];
+    const start = 1000, end = c.redline, count = 121;
+
+    for (let i = 0; i < count; i++) {
+        const rpm = start + (end - start) * i / (count - 1);
+        let torqueShape;
+        if (rpm <= torquePeakRpm) {
+            torqueShape = (1 - Math.exp(-rpm / riseTau)) / Math.max(0.001, riseAtPeak);
+        } else {
+            const postPeak = clamp((rpm - torquePeakRpm) / Math.max(1, c.redline - torquePeakRpm), 0, 1);
+            torqueShape = 1 - eng.topEndDrop * Math.pow(postPeak, 1.35);
+        }
+
+        let boostPsi = 0;
+        let boostDelivery = 0;
+        if (turboLike) {
+            const turboSize = clamp(c.turboSize, 0, 100);
+            const response = clamp(c.boostResponse, 0, 100);
+            const spoolRpm = clamp(1500 + turboSize * 19 - response * 10, 900, 3900);
+            const spoolWidth = 420 + turboSize * 1.3 - response * 1.2;
+            const logistic = threshold => 1 / (1 + Math.exp(-(rpm - threshold) / Math.max(280, spoolWidth)));
+            if (c.induction === "sequential") {
+                // The simplified two-stage curve brings a smaller stage in earlier, then blends to full flow.
+                boostDelivery = 0.58 * logistic(spoolRpm * 0.78) + 0.42 * logistic(spoolRpm * 1.08);
+            } else if (c.induction === "twincharge") {
+                // A small low-speed supercharger contribution blends into turbo delivery.
+                boostDelivery = 0.22 + 0.78 * logistic(spoolRpm);
+            } else {
+                boostDelivery = logistic(spoolRpm);
+            }
+            // Small turbo flow limitation at high RPM; larger sizing trades response for top-end capacity.
+            const highRpm = clamp((rpm / c.redline - 0.72) / 0.28, 0, 1);
+            const flowLimit = 1 - (1 - turboSize / 100) * Math.pow(highRpm, 1.35) * 0.16;
+            boostDelivery = clamp(boostDelivery * flowLimit, 0, 1);
+            boostPsi = c.boost * boostDelivery;
+        } else if (c.induction === "super") {
+            // A belt-driven supercharger responds immediately but has a modeled drive loss.
+            boostDelivery = 0.88;
+            boostPsi = c.boost * boostDelivery;
+        }
+
+        const pressureRatio = 1 + boostPsi / 14.7;
+        const chargeCooling = 1 - (boostPsi / 25) * (1 - f.intercoolerEffectiveness) * 0.10;
+        const thermalConsistency = 1 - (boostPsi / 25) * (1 - f.coolingScore) * 0.055;
+        const superchargerDriveFactor = c.induction === "super" ? 0.94 : c.induction === "twincharge" ? 0.975 : 1;
+        const effectiveBmep = f.baseBmepPsi * (1 + (pressureRatio - 1) * chargeCooling) * thermalConsistency * superchargerDriveFactor;
+        const torque = torqueAtPeakBMEP * torqueShape * (effectiveBmep / f.baseBmepPsi);
+        const hp = torque * rpm / 5252;
+        const veEstimate = clamp(0.86 + (torqueShape - 1) * 0.10, 0.68, 0.94);
+        const airflowCfm = displacementCi * rpm * veEstimate / 3456 * pressureRatio;
+        points.push({ rpm, torque, hp, boostPsi, bmepPsi: torque * 150.8 / displacementCi, pressureRatio, airflowCfm });
+    }
+
+    const peakHp = points.reduce((a, b) => b.hp > a.hp ? b : a, points[0]);
+    const peakTq = points.reduce((a, b) => b.torque > a.torque ? b : a, points[0]);
+    const airflow = points[points.length - 1].airflowCfm;
+    const peakBmepPsi = peakTq.torque * 150.8 / displacementCi;
+    return { points, peakHp, peakTq, airflow, displacementCi, baseBmepPsi:f.baseBmepPsi, peakBmepPsi, torquePeakRpm, isRotary:!!eng.rotary };
+}
+function format(n) {
+    return Math.round(n).toLocaleString("en-US")
+}
+function updateLabels() {
+    const c=readConfig(), eng=layouts[c.layout];
+    $("redlineOut").textContent=format(c.redline)+" RPM";
+    $("boostOut").textContent=c.boost+" PSI";
+    $("ecuOut").textContent=c.ecu+"%";
+    ["turboSize","boostResponse","intakeFlow","exhaustFlow","coolingCapacity"].forEach(id=>{const el=$(id+"Out");if(el)el.textContent=c[id]+"%";});
+    const turboLike=["turbo","twin","sequential","twincharge"].includes(c.induction);
+    $("boostField").hidden=c.induction==="na";
+    $("intercoolerField").hidden=!turboLike;
+    $("turboSizeField").hidden=!turboLike;
+    $("boostResponseField").hidden=!turboLike;
+    $("liveRpm").max=String(c.redline);
+    if(Number($("liveRpm").value)>c.redline) $("liveRpm").value=String(c.redline);
+    $("liveRpmLabel").textContent=format(Number($("liveRpm").value))+" RPM";
+    $("engineCode").textContent=eng.code+" · "+c.displacement.toFixed(1)+"L";
+    $("engineBlock").style.gridTemplateColumns=`repeat(${Math.min(eng.cyl,4)},1fr)`;
+    $("engineBlock").innerHTML=Array.from( {
+        length:eng.cyl
+    }
+    ,()=>'<i class="cylinder"></i>').join("");
+    $("sumEngine").textContent=c.displacement.toFixed(1)+"L "+eng.name;
+    const inductionNames={na:"Naturally aspirated",turbo:"Single turbo",twin:"Twin-turbo",sequential:"Sequential twin-turbo",super:"Supercharged",twincharge:"Twincharged"};
+    $("sumInduction").textContent=inductionNames[c.induction]||c.induction;
+    const coolingNames={stock:"Stock",upgraded:"Upgraded radiator",track:"Track package",race:"Race cooling",oil:"Oil cooler package"};
+    $("sumCooling").textContent=coolingNames[c.cooling]||c.cooling;
+    const intName={stock:"Stock",sport:"Performance",race:"Race",itb:"ITBs",ram:"Ram-air"}[c.intake];
+    const exhName={stock:"Stock",sport:"Performance",race:"Race",headers:"Equal-length headers",open:"Open competition exhaust"}[c.exhaust];
+    $("sumBreathing").textContent=intName+" / "+exhName;
+    $("sumAir").textContent=(simulate(c).airflow).toFixed(0)+" CFM (est.)";
+    $("sumStatus").textContent=lastResults?"Configured · dyno available":"Ready for dyno";
+}
+function drawChart(results) {
+    const canvas=$("dynoChart"),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+    canvas.width=Math.max(1,Math.floor(rect.width*dpr));
+    canvas.height=Math.max(1,Math.floor(rect.height*dpr));
+    const ctx=canvas.getContext("2d");
+    ctx.scale(dpr,dpr);
+    const w=rect.width,h=rect.height,p= {
+        l:48,r:15,t:18,b:32
+    }
+    ,cw=w-p.l-p.r,ch=h-p.t-p.b;
+    ctx.clearRect(0,0,w,h);
+    const pts=results?results.points:[];
+    const maxHp=results?Math.max(100,Math.ceil(results.peakHp.hp/100)*100):800;
+    const maxTq=results?Math.max(100,Math.ceil(results.peakTq.torque/100)*100):800;
+    const maxY=Math.max(maxHp,maxTq)*1.12;
+    ctx.font="10px Segoe UI";
+    ctx.lineWidth=1;
+    for(let i=0;
+    i<=5;
+    i++) {
+        const y=p.t+ch*i/5;
+        ctx.strokeStyle="#223140";
+        ctx.beginPath();
+        ctx.moveTo(p.l,y);
+        ctx.lineTo(w-p.r,y);
+        ctx.stroke();
+        ctx.fillStyle="#7e91a4";
+        ctx.textAlign="right";
+        ctx.fillText(Math.round(maxY*(1-i/5)),p.l-7,y+3);
+    }
+    for(let i=0;
+    i<=5;
+    i++) {
+        const x=p.l+cw*i/5;
+        ctx.strokeStyle="#182634";
+        ctx.beginPath();
+        ctx.moveTo(x,p.t);
+        ctx.lineTo(x,p.t+ch);
+        ctx.stroke();
+        ctx.fillStyle="#7e91a4";
+        ctx.textAlign="center";
+        ctx.fillText(results?format(1000+(results.points.at(-1).rpm-1000)*i/5):String(i*2)+"k",x,h-10);
+    }
+    ctx.fillStyle="#91a2b6";
+    ctx.textAlign="left";
+    ctx.fillText("OUTPUT",p.l,10);
+    ctx.textAlign="right";
+    ctx.fillText("RPM →",w-p.r,h-1);
+    if(!pts.length) {
+        ctx.fillStyle="#65798d";
+        ctx.textAlign="center";
+        ctx.font="13px Segoe UI";
+        ctx.fillText("RUN DYNO PULL TO GENERATE CURVES",w/2,h/2);
+        return
+    }
+    const draw=(key,color)=> {
+        ctx.beginPath();
+        pts.forEach((pt,i)=> {
+            const x=p.l+(pt.rpm-1000)/(pts.at(-1).rpm-1000)*cw;
+            const y=p.t+ch-(pt[key]/maxY)*ch;
+            i?ctx.lineTo(x,y):ctx.moveTo(x,y)
+        }
+        );
+        ctx.strokeStyle=color;
+        ctx.lineWidth=2.4;
+        ctx.stroke();
+    }
+    ;
+    const mode=$("chartMode")?.value||"both";
+    if(mode!=="torque")draw("hp","#ff303b");
+    if(mode!=="hp")draw("torque","#7cf0b2");
+}
+function runDyno() {
+    const c=readConfig(),r=simulate(c);
+    r.configKey=JSON.stringify(c);
+    lastResults=r;
+    $("peakHp").textContent=format(r.peakHp.hp);
+    $("peakTq").textContent=format(r.peakTq.torque);
+    $("peakRpm").textContent=format(r.peakHp.rpm);
+    const band=r.points.filter(pt=>pt.hp>=r.peakHp.hp*0.9);
+    $("powerBand").textContent=band.length?`${format(band[0].rpm)}–${format(band[band.length-1].rpm)}`:"—";
+    $("dynoAirflow").textContent=format(r.airflow);
+    $("dynoInsight").textContent=`Peak power at ${format(r.peakHp.rpm)} RPM · peak torque at ${format(r.peakTq.rpm)} RPM. Model values are illustrative, not real dyno predictions.`;
+    $("dynoStatus").textContent="● PULL COMPLETE";
+    $("dynoStatus").style.color="var(--green)";
+    $("sumStatus").textContent="Dyno complete";
+    drawChart(r);
+    drawBoostChart(r);
+    updateLiveReadout();
+}
+let sweepTimer=null;
+function interpolatePoint(results,rpm){
+  if(!results || !results.points.length) return {rpm,torque:0,hp:0,boostPsi:0};
+  const pts=results.points;
+  if(rpm<=pts[0].rpm) return pts[0];
+  if(rpm>=pts[pts.length-1].rpm) return pts[pts.length-1];
+  let i=1; while(i<pts.length && pts[i].rpm<rpm) i++;
+  const a=pts[i-1],b=pts[i],t=(rpm-a.rpm)/(b.rpm-a.rpm);
+  return {rpm,torque:a.torque+(b.torque-a.torque)*t,hp:a.hp+(b.hp-a.hp)*t,boostPsi:(a.boostPsi||0)+((b.boostPsi||0)-(a.boostPsi||0))*t};
+}
+function updateLiveReadout(){
+  const c=readConfig(), r=lastResults&&lastResults.configKey===JSON.stringify(c)?lastResults:simulate(c);
+  const rpm=clamp(Number($("liveRpm").value)||1000,1000,c.redline),pt=interpolatePoint(r,rpm);
+  $("liveRpmOut").textContent=format(rpm); $("liveRpmLabel").textContent=format(rpm)+" RPM";
+  $("liveHpOut").textContent=format(pt.hp); $("liveTqOut").textContent=format(pt.torque);
+  const boostDriven=["turbo","twin","sequential","twincharge","super"].includes(c.induction);
+  $("engineeringInsight").textContent=boostDriven?`At ${format(rpm)} RPM: modeled boost ${pt.boostPsi.toFixed(1)} PSI · ${format(pt.hp)} hp · ${format(pt.torque)} lb-ft.`:`At ${format(rpm)} RPM: ${format(pt.hp)} hp · ${format(pt.torque)} lb-ft. Naturally aspirated setup: no boost pressure.`;
+  updatePhysicsPanel(c,r,pt,rpm);
+}
+function updatePhysicsPanel(c,r,pt,rpm){
+  const eng=layouts[c.layout]||layouts.I4;
+  const liveBmep=pt.torque*150.8/r.displacementCi;
+  const pressureRatio=1+(pt.boostPsi||0)/14.7;
+  $("physicsBmep").textContent=liveBmep.toFixed(1);
+  $("physicsBmepUnit").textContent=eng.rotary?"psi · model index*":"psi · brake MEP";
+  $("physicsTorquePeak").textContent=format(r.peakTq.rpm);
+  $("physicsPressureRatio").textContent=pressureRatio.toFixed(2)+"×";
+  if(eng.rotary){
+    $("physicsFiringRate").textContent="ROTARY";
+    $("physicsFiringUnit").textContent="separate rotor cycle model";
+  } else {
+    const eventsPerSecond=rpm/60*eng.cyl/2;
+    $("physicsFiringRate").textContent=eventsPerSecond.toFixed(1);
+    $("physicsFiringUnit").textContent="piston firing events / sec";
+  }
+  $("physicsArchitecture").textContent=eng.rotary?`${eng.name} · ${eng.rotors} rotors · ${eng.character} profile`:`${eng.name} · ${eng.cyl} cylinders · ${eng.character} profile`;
+  $("physicsDisplacement").textContent=`${c.displacement.toFixed(1)} L · ${r.displacementCi.toFixed(1)} in³`;
+  $("physicsNote").textContent=eng.rotary
+    ? "Rotary displacement conventions differ from piston-engine conventions. This model treats the entered litre value as a nominal equivalent; do not compare its BMEP index directly with piston engines."
+    : `At ${format(rpm)} RPM, this ${eng.cyl}-cylinder four-stroke profile models ${$("physicsFiringRate").textContent} firing events per second. Layout changes curve shape and firing cadence; displacement and BMEP set the torque scale.`;
+}
+function drawBoostChart(results){
+  const canvas=$("boostChart"),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  canvas.width=Math.max(1,Math.floor(rect.width*dpr)); canvas.height=Math.max(1,Math.floor(rect.height*dpr));
+  const ctx=canvas.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=rect.width,h=rect.height,p={l:44,r:14,t:16,b:30},cw=w-p.l-p.r,ch=h-p.t-p.b;
+  ctx.clearRect(0,0,w,h);
+  const pts=results?.points||[], maxBoost=Math.max(5,Math.ceil((results?.points?.reduce((m,x)=>Math.max(m,x.boostPsi||0),0)||0)/5)*5);
+  ctx.font="10px Segoe UI"; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=p.t+ch*i/4; ctx.strokeStyle="#223140";ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();
+    ctx.fillStyle="#7e91a4";ctx.textAlign="right";ctx.fillText((maxBoost*(1-i/4)).toFixed(0),p.l-7,y+3);
+    const x=p.l+cw*i/4;ctx.strokeStyle="#182634";ctx.beginPath();ctx.moveTo(x,p.t);ctx.lineTo(x,p.t+ch);ctx.stroke();
+    ctx.textAlign="center";ctx.fillText(pts.length?format(1000+(pts.at(-1).rpm-1000)*i/4):String(i*2)+"k",x,h-9);
+  }
+  ctx.fillStyle="#91a2b6";ctx.textAlign="left";ctx.fillText("BOOST (PSI)",p.l,10);ctx.textAlign="right";ctx.fillText("RPM →",w-p.r,h-1);
+  const turboLike=pts.some(pt=>(pt.boostPsi||0)>0);
+  if(!pts.length||!turboLike){ctx.fillStyle="#65798d";ctx.textAlign="center";ctx.font="12px Segoe UI";ctx.fillText("SELECT A BOOSTED SETUP TO SEE PRESSURE DELIVERY",w/2,h/2);return;}
+  ctx.beginPath();pts.forEach((pt,i)=>{const x=p.l+(pt.rpm-1000)/(pts.at(-1).rpm-1000)*cw,y=p.t+ch-((pt.boostPsi||0)/maxBoost)*ch;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+  ctx.strokeStyle="#ff303b";ctx.lineWidth=2.5;ctx.stroke();
+}
+function startSweep(){
+  stopSweep(); const slider=$("liveRpm"),max=Number(slider.max)||7000;
+  if(Number(slider.value)>=max) slider.value="1000";
+  sweepTimer=setInterval(()=>{let next=Number(slider.value)+100;if(next>max){stopSweep();return;}slider.value=String(next);updateLiveReadout();},65);
+}
+function stopSweep(){if(sweepTimer!==null){clearInterval(sweepTimer);sweepTimer=null;}}
+
+function buildName(c) {
+    const eng=layouts[c.layout];
+    const induction= {
+        na:"NA",turbo:"Turbo",twin:"Twin-Turbo",sequential:"Sequential Turbo",super:"Supercharged",twincharge:"Twincharged"
+    }[c.induction] || c.induction;
+    return `${c.displacement.toFixed(1)}L ${eng.name} · ${induction}`;
+}
+function drawComparison(resultsA, resultsB) {
+    const canvas=$("compareChart"),rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+    canvas.width=Math.max(1,Math.floor(rect.width*dpr));
+    canvas.height=Math.max(1,Math.floor(rect.height*dpr));
+    const ctx=canvas.getContext("2d");
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const w=rect.width,h=rect.height,p= {
+        l:46,r:12,t:18,b:30
+    }
+    ,cw=w-p.l-p.r,ch=h-p.t-p.b;
+    ctx.clearRect(0,0,w,h);
+    if(!resultsA || !resultsB) {
+        ctx.fillStyle="#65798d";
+        ctx.textAlign="center";
+        ctx.font="12px Segoe UI";
+        ctx.fillText("CAPTURE BUILD A, THEN RUN AND COMPARE BUILD B",w/2,h/2);
+        return;
+    }
+    const maxRpm=Math.max(resultsA.points.at(-1).rpm,resultsB.points.at(-1).rpm);
+    const maxHp=Math.max(resultsA.peakHp.hp,resultsB.peakHp.hp,100)*1.12;
+    ctx.font="10px Segoe UI";
+    ctx.lineWidth=1;
+    for(let i=0;
+    i<=5;
+    i++) {
+        const y=p.t+ch*i/5;
+        ctx.strokeStyle="#223140";
+        ctx.beginPath();
+        ctx.moveTo(p.l,y);
+        ctx.lineTo(w-p.r,y);
+        ctx.stroke();
+        ctx.fillStyle="#7e91a4";
+        ctx.textAlign="right";
+        ctx.fillText(Math.round(maxHp*(1-i/5)),p.l-6,y+3);
+        const x=p.l+cw*i/5;
+        ctx.strokeStyle="#182634";
+        ctx.beginPath();
+        ctx.moveTo(x,p.t);
+        ctx.lineTo(x,p.t+ch);
+        ctx.stroke();
+        ctx.fillStyle="#7e91a4";
+        ctx.textAlign="center";
+        ctx.fillText(Math.round(1000+(maxRpm-1000)*i/5).toLocaleString(),x,h-9);
+    }
+    const draw=(result,color)=> {
+        ctx.beginPath();
+        result.points.forEach((pt,i)=> {
+            const x=p.l+(pt.rpm-1000)/(maxRpm-1000)*cw;
+            const y=p.t+ch-(pt.hp/maxHp)*ch;
+            i?ctx.lineTo(x,y):ctx.moveTo(x,y)
+        }
+        );
+        ctx.strokeStyle=color;
+        ctx.lineWidth=2.5;
+        ctx.stroke();
+    }
+    ;
+    draw(resultsA,"#ff303b");
+    draw(resultsB,"#7cf0b2");
+    ctx.fillStyle="#91a2b6";
+    ctx.textAlign="left";
+    ctx.fillText("POWER (hp)",p.l,10);
+    ctx.textAlign="right";
+    ctx.fillText("RPM →",w-p.r,h-1);
+}
+function captureBuildA() {
+    const c=readConfig();
+    const r=simulate(c);
+    buildA= {
+        config:c,results:r
+    }
+    ;
+    $("compareAName").textContent=buildName(c);
+    $("compareAStats").textContent=`${format(r.peakHp.hp)} hp peak · ${format(r.peakTq.torque)} lb-ft peak`;
+    $("compareStatus").textContent="Build A captured. Change settings, run the dyno, then compare.";
+    compareResults=null;
+    drawComparison(null,null);
+}
+function compareCurrentBuild() {
+    if(!buildA) {
+        $("compareStatus").textContent="Capture Build A first.";
+        return;
+    }
+    const c=readConfig();
+    const r=lastResults && lastResults.configKey===JSON.stringify(c) ? lastResults : simulate(c);
+    compareResults= {
+        config:c,results:r
+    }
+    ;
+    $("compareBName").textContent=buildName(c);
+    const hpDelta=r.peakHp.hp-buildA.results.peakHp.hp;
+    const tqDelta=r.peakTq.torque-buildA.results.peakTq.torque;
+    const sign=n=>n>0?"+":"";
+    $("compareBStats").textContent=`${format(r.peakHp.hp)} hp (${sign(hpDelta)}${format(hpDelta)} vs A) · ${format(r.peakTq.torque)} lb-ft (${sign(tqDelta)}${format(tqDelta)} vs A)`;
+    $("compareStatus").textContent="Comparison ready. Horsepower curves are overlaid below; figures are simplified model estimates.";
+    drawComparison(buildA.results,r);
+}
+function applyConfig(c) {
+    for(const key of Object.keys(initial)) {
+        const el=$(key);
+        if(el)el.value=c[key]!==undefined?c[key]:initial[key];
+    }
+    updateLabels();
+    runDyno();
+}
+["layout","displacement","induction","fuel","redline","boost","ecu","intake","exhaust","cooling","intercooler","turboSize","boostResponse","intakeFlow","exhaustFlow","coolingCapacity"].forEach(id=> {
+    $(id).addEventListener("input",()=> {
+        updateLabels();
+        $("dynoStatus").textContent="● CONFIG CHANGED";
+        $("dynoStatus").style.color="var(--amber)";
+        updateLiveReadout();
+        drawBoostChart(simulate(readConfig()));
+    }
+    );
+    $(id).addEventListener("change",updateLabels);
+}
+);
+$("runBtn").addEventListener("click",runDyno);
+$("liveRpm").addEventListener("input",updateLiveReadout);
+$("sweepBtn").addEventListener("click",startSweep);
+$("stopSweepBtn").addEventListener("click",stopSweep);
+$("syncRpmBtn").addEventListener("click",()=>{$("liveRpm").value=$("redline").value;updateLiveReadout();});
+$("chartMode").addEventListener("change",()=>drawChart(lastResults));
+$("exportCsvBtn").addEventListener("click",()=>{
+    const c=readConfig(),r=lastResults&&lastResults.configKey===JSON.stringify(c)?lastResults:simulate(c);
+    const rows=[["RPM","Horsepower_hp","Torque_lb_ft"],...r.points.map(pt=>[Math.round(pt.rpm),pt.hp.toFixed(2),pt.torque.toFixed(2)])];
+    const csv=rows.map(row=>row.join(",")).join("\r\n");
+    const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+    const url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="APEX_Dyno_Run.csv";a.click();URL.revokeObjectURL(url);
+    $("dynoInsight").textContent="CSV exported. Figures are simplified simulation estimates.";
+});
+$("saveBtn").addEventListener("click",()=> {
+    try {
+        localStorage.setItem("apexBuildV2",JSON.stringify(readConfig()));
+        $("saveStatus").textContent="Build saved locally in this browser.";
+    }
+    catch(e) {
+        $("saveStatus").textContent="Could not save in this browser session.";
+    }
+}
+);
+$("loadBtn").addEventListener("click",()=> {
+    try {
+        const raw=localStorage.getItem("apexBuildV2");
+        if(!raw) {
+            $("saveStatus").textContent="No saved build found yet.";
+            return;
+        }
+        applyConfig(JSON.parse(raw));
+        $("saveStatus").textContent="Saved build loaded.";
+    }
+    catch(e) {
+        $("saveStatus").textContent="Could not load the saved build.";
+    }
+}
+);
+// ---------- Build Garage: presets and named local builds ----------
+const builtInPresets = {
+  "preset-f40": { name:"F40 LEGEND · Twin-Turbo V8", config:{layout:"V8",displacement:2.9,induction:"twin",fuel:"premium",redline:7500,boost:16,ecu:108,intake:"race",exhaust:"headers",cooling:"race",intercooler:"good"} },
+  "preset-jdm": { name:"JDM MONSTER · High-Rev I6", config:{layout:"I6",displacement:3.0,induction:"turbo",fuel:"e85",redline:8500,boost:18,ecu:110,intake:"itb",exhaust:"race",cooling:"track",intercooler:"large"} },
+  "preset-track": { name:"TRACK WEAPON · NA Flat-6", config:{layout:"F6",displacement:3.8,induction:"na",fuel:"premium",redline:8200,boost:8,ecu:105,intake:"itb",exhaust:"headers",cooling:"track",intercooler:"stock"} },
+  "preset-chaos": { name:"ABSOLUTE CHAOS · W16", config:{layout:"W16",displacement:8.0,induction:"twin",fuel:"race",redline:7200,boost:22,ecu:112,intake:"ram",exhaust:"open",cooling:"race",intercooler:"water"} },
+  "preset-rotary": { name:"ROTARY RIOT · 3-Rotor", config:{layout:"R3",displacement:2.0,induction:"turbo",fuel:"e85",redline:9500,boost:17,ecu:108,intake:"race",exhaust:"open",cooling:"race",intercooler:"water"} }
+};
+function getCustomPresets(){ try { return JSON.parse(localStorage.getItem("apexGaragePresets")||"{}"); } catch(e){ return {}; } }
+function refreshPresetList(){
+  const select=$("presetSelect"), old=select.value;
+  select.innerHTML='<option value="">Select a build…</option><optgroup label="APEX FACTORY PRESETS"></optgroup><optgroup label="MY SAVED BUILDS"></optgroup>';
+  const groups=select.querySelectorAll("optgroup");
+  Object.entries(builtInPresets).forEach(([id,p])=>groups[0].append(new Option(p.name,id)));
+  Object.entries(getCustomPresets()).forEach(([id,p])=>groups[1].append(new Option(p.name,id)));
+  if ([...select.options].some(o=>o.value===old)) select.value=old;
+}
+function loadPresetById(id){
+  const p=builtInPresets[id] || getCustomPresets()[id];
+  if(!p){ $("presetStatus").textContent="Choose a preset or saved build first."; return; }
+  applyConfig(p.config);
+  $("presetName").value=p.name;
+  $("presetStatus").textContent="Loaded: "+p.name;
+}
+$("loadPresetBtn").addEventListener("click",()=>loadPresetById($("presetSelect").value));
+$("presetSelect").addEventListener("change",()=>{
+  const id=$("presetSelect").value, p=builtInPresets[id]||getCustomPresets()[id];
+  if(p) $("presetName").value=p.name;
+});
+$("savePresetBtn").addEventListener("click",()=>{
+  const name=$("presetName").value.trim();
+  if(!name){ $("presetStatus").textContent="Enter a build name first."; $("presetName").focus(); return; }
+  try {
+    const all=getCustomPresets(), id="custom-"+Date.now();
+    all[id]={name,config:readConfig()};
+    localStorage.setItem("apexGaragePresets",JSON.stringify(all));
+    refreshPresetList(); $("presetSelect").value=id;
+    $("presetStatus").textContent="Saved new build: "+name;
+  } catch(e){ $("presetStatus").textContent="Could not save. Browser storage may be full or disabled."; }
+});
+$("deletePresetBtn").addEventListener("click",()=>{
+  const id=$("presetSelect").value;
+  if(!id.startsWith("custom-")){ $("presetStatus").textContent="Only your custom saved builds can be deleted."; return; }
+  const all=getCustomPresets();
+  if(!all[id]){ $("presetStatus").textContent="That saved build was not found."; return; }
+  const name=all[id].name; delete all[id];
+  localStorage.setItem("apexGaragePresets",JSON.stringify(all));
+  refreshPresetList(); $("presetName").value="";
+  $("presetStatus").textContent="Deleted saved build: "+name;
+});
+refreshPresetList();
+
+$("resetBtn").addEventListener("click",()=> {
+    applyConfig(initial);
+    $("saveStatus").textContent="Default configuration restored. Saved build was not deleted.";
+}
+);
+$("captureABtn").addEventListener("click",captureBuildA);
+$("compareBtn").addEventListener("click",compareCurrentBuild);
+$("clearCompareBtn").addEventListener("click",()=> {
+    buildA=null;
+    compareResults=null;
+    $("compareAName").textContent="Not captured";
+    $("compareAStats").textContent="Capture a reference build.";
+    $("compareBName").textContent="Not run yet";
+    $("compareBStats").textContent="Run the dyno after changing settings.";
+    $("compareStatus").textContent="Comparison cleared.";
+    drawComparison(null,null);
+}
+);
+window.addEventListener("resize",()=> {
+    drawChart(lastResults);
+    drawBoostChart(lastResults);
+    drawComparison(buildA?.results,compareResults?.results);
+}
+);
+updateLabels();
+drawChart(null);
+drawBoostChart(null);
+updateLiveReadout();
+drawComparison(null,null);
+
+// ================= DRAG STRIP · GAME MODE =================
+// Dyno torque -> gearing -> traction limit -> drag, integrated at 240 Hz. Visual + audio only reads the sim.
+(function(){
+  const cv=$("dragCanvas"), cx=cv.getContext("2d");
+  const GEARS=[3.62,2.19,1.54,1.19,0.97,0.80];
+  const FINAL={short:4.45,balanced:3.7,tall:3.05};
+  const MU={street:0.95,sport:1.15,slick:1.55};
+  const TRACK=402.34, MPH=2.23694, SIXTY=26.8224, PPM=22, RT=0.33, EFF=0.88;
+
+  let state="idle", stageT=0, greenAt=3, greenBeeped=false, ambersLit=0, raceT=0, x=0, v=0, gear=0, shiftT=0, accel=0;
+  let rpm=900, dispRpm=900, boostPsi=0, spin=false, limT=0, flameT=0, tireRot=0, clock=0, lastTs=0;
+  let sixty=null, et=null, trap=null, react=null, race=null, revHeld=false, cfg=readConfig(), geo=null;
+  let overlay={txt:"",col:"#fff",t:0}, particles=[], simKey="", simVal=null;
+  let best=null; try{ best=parseFloat(localStorage.getItem("apexBestEt"))||null; }catch(e){}
+  let fsActive=false, card=null, cardT=0, popup={txt:"",col:"#fff",t:0}, shifts=0, perfect=0, finishBeepTimer=null;
+  const touchDev=window.matchMedia&&matchMedia("(pointer:coarse)").matches;
+  const setCard=o=>{card=o;cardT=0;};
+
+  // ---------- helpers ----------
+  function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  const rand=rng(7);
+  function makeCity(count,minW,maxW,minH,maxH){const arr=[];let px=0;for(let i=0;i<count;i++){const w=minW+rand()*(maxW-minW),h=minH+rand()*(maxH-minH);arr.push({x:px,w,h,win:Math.floor(rand()*100)});px+=w+rand()*8;}return {arr,total:px};}
+  const farCity=makeCity(40,26,60,40,125), nearCity=makeCity(30,40,90,28,90);
+  const stars=Array.from({length:70},()=>({x:rand(),y:rand()*0.5,s:rand()*1.3+0.4,p:rand()*6}));
+  function shade(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;const f=amt<0?0:255,p=Math.abs(amt);r=Math.round(r+(f-r)*p);g=Math.round(g+(f-g)*p);b=Math.round(b+(f-b)*p);return `rgb(${r},${g},${b})`;}
+  function simFor(c){const k=JSON.stringify(c);if(k!==simKey){simKey=k;simVal=simulate(c);}return simVal;}
+  const setMsg=t=>{$("dragMsg").textContent=t;};
+  function tier(e){if(e>=17)return "Grocery Getter 🛒";if(e>=15)return "Daily Driver 🚗";if(e>=13)return "Hot Hatch 🔥";if(e>=11.5)return "Sports Car 🏁";if(e>=10)return "Supercar 💥";if(e>=8.5)return "Hypercar 🚀";return "Top Fuel Energy ☄️";}
+  function setResults(){
+    $("dragEt").textContent=et!=null?et.toFixed(2):"—";
+    $("dragSixty").textContent=sixty!=null?sixty.toFixed(2):"—";
+    $("dragTrap").textContent=trap!=null?format(trap):"—";
+    $("dragRt").textContent=react!=null?react.toFixed(3):"—";
+    $("dragBest").textContent=best!=null?best.toFixed(2):"—";
+  }
+  function updateBtn(){
+    const man=(state==="racing"&&race)?race.manual:$("dragTrans").value==="manual";
+    $("dragWrap").classList.toggle("manual",man);
+    const b=$("dragLaunchBtn");
+    b.disabled=state==="racing"&&!man;
+    b.textContent={idle:"▶ STAGE & LAUNCH",staging:"⚡ GO! (on green)",racing:man?"⬆ SHIFT UP":"RACING…",finished:"▶ RUN IT BACK",foul:"▶ RUN IT BACK"}[state];
+    const g=$("fsGo"); g.disabled=state==="racing"&&!man;
+    g.textContent={idle:"▶ STAGE",staging:"GO!",racing:man?"SHIFT ▲":"…",finished:"↻ AGAIN",foul:"↻ AGAIN"}[state];
+  }
+
+  // ---------- audio (Web Audio synth driven by firing frequency) ----------
+  let AC=null, au=null, soundOn=true;
+  function initAudio(){
+    if(AC){ if(AC.state==="suspended") AC.resume(); return; }
+    const Ctor=window.AudioContext||window.webkitAudioContext; if(!Ctor) return;
+    try{
+      AC=new Ctor();
+      const master=AC.createGain(); master.gain.value=0.45; master.connect(AC.destination);
+      const eng=AC.createGain(); eng.gain.value=0;
+      const lp=AC.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=800; lp.Q.value=1.1;
+      const sh=AC.createWaveShaper(); const n=1024,curve=new Float32Array(n);
+      for(let i=0;i<n;i++){const xx=i*2/n-1;curve[i]=Math.tanh(xx*2.6)/Math.tanh(2.6);} sh.curve=curve; sh.oversample="2x";
+      const mk=(type,g)=>{const o=AC.createOscillator();o.type=type;const gg=AC.createGain();gg.gain.value=g;o.connect(gg).connect(sh);o.start();return o;};
+      const o1=mk("sawtooth",0.6), o2=mk("square",0.32), o3=mk("sawtooth",0.2);
+      sh.connect(lp); lp.connect(eng); eng.connect(master);
+      const tw=AC.createOscillator(); tw.type="sine"; const twg=AC.createGain(); twg.gain.value=0; tw.connect(twg).connect(master); tw.start();
+      const nb=AC.createBuffer(1,AC.sampleRate,AC.sampleRate), d=nb.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+      au={master,eng,lp,o1,o2,o3,tw,twg,nb};
+      if(AC.state==="suspended") AC.resume();
+    }catch(e){ AC=null; au=null; }
+  }
+  function beep(freq,dur,type){
+    if(!au||!soundOn) return;
+    const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();
+    o.type=type||"sine"; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.12,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(au.master); o.start(t); o.stop(t+dur+0.05);
+  }
+  function blowoff(){
+    if(!au||!soundOn) return;
+    const t=AC.currentTime,s=AC.createBufferSource(),hp=AC.createBiquadFilter(),g=AC.createGain();
+    s.buffer=au.nb; hp.type="highpass"; hp.frequency.value=2600;
+    g.gain.setValueAtTime(0.22,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.35);
+    s.connect(hp).connect(g).connect(au.master); s.start(t); s.stop(t+0.4);
+  }
+  function updateAudio(){
+    if(!au) return;
+    const t=AC.currentTime, c=cfg, e=layouts[c.layout]||layouts.I4;
+    const active=state==="staging"||state==="racing"||(state==="finished"&&v>0.5)||revHeld;
+    let target=0;
+    if(soundOn&&active){
+      if(state==="staging") target=0.10+0.02*Math.sin(clock*9);
+      else if(state==="racing") target=shiftT>0?0.05:0.16+0.10*(dispRpm/c.redline);
+      else if(state==="finished") target=0.06;
+      else target=0.12+0.10*(dispRpm/c.redline);
+    }
+    const f=e.rotary?e.rotors*dispRpm/60:dispRpm/60*e.cyl/2, fq=clamp(f,22,950);
+    au.o1.frequency.setTargetAtTime(fq,t,0.025);
+    au.o2.frequency.setTargetAtTime(fq*0.5,t,0.025);
+    au.o3.frequency.setTargetAtTime(fq*2.003,t,0.025);
+    au.lp.frequency.setTargetAtTime(clamp(250+dispRpm*0.28+(state==="racing"&&shiftT<=0?320:0),250,3600),t,0.05);
+    au.eng.gain.setTargetAtTime(target,t,0.035);
+    const boosted=c.induction!=="na";
+    au.tw.frequency.setTargetAtTime(1500+dispRpm*0.8+boostPsi*45,t,0.05);
+    au.twg.gain.setTargetAtTime((soundOn&&active&&boosted)?clamp(boostPsi/25,0,1)*0.035:0,t,0.06);
+  }
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden&&au){ const t=AC.currentTime; au.eng.gain.setTargetAtTime(0,t,0.02); au.twg.gain.setTargetAtTime(0,t,0.02); revHeld=false; } });
+
+  // ---------- race flow ----------
+  function beginStaging(){
+    const c=readConfig(), r=simulate(c);
+    race={c,r,mass:Number($("dragWeight").value)*0.45359,final:FINAL[$("dragGear").value]||3.7,mu:MU[$("dragTires").value]||0.95,launchRpm:Math.min(4200,c.redline*0.62),manual:$("dragTrans").value==="manual"};
+    shifts=0; perfect=0; popup.t=0;
+    state="staging"; stageT=0; greenAt=2.5+Math.random()*0.7; greenBeeped=false; ambersLit=0;
+    x=0; v=0; gear=0; shiftT=0; raceT=0; accel=0; sixty=null; et=null; trap=null; react=null; limT=0; spin=false; boostPsi=0; particles.length=0; card=null;
+    setResults(); updateBtn();
+    setMsg("Staged. Watch the tree and hit GO the instant it turns green. Early = red light.");
+  }
+  function startRace(rt,late){
+    state="racing"; react=rt; raceT=0; flameT=0.3;
+    overlay={txt:"GO!",col:"#7cf0b2",t:0.8};
+    setMsg(late?"Too slow off the tree 😴 — but the car is going.":(rt<0.2?"Launched! Lightning reflexes ⚡":"Launched!"));
+    setResults(); updateBtn();
+  }
+  function foul(){
+    state="foul"; react=null; overlay={txt:"RED LIGHT",col:"#ff303b",t:1.0};
+    setCard({title:"RED LIGHT",col:"#ff303b",sub:"You jumped the tree",tier:""});
+    setMsg("🔴 Red light! You jumped the tree — disqualified. Run it back.");
+    beep(160,0.5,"square"); setResults(); updateBtn();
+  }
+  function finish(over){
+    et=raceT-over; trap=v*MPH; state="finished";
+    let nb=false; if(best==null||et<best){ best=et; nb=true; try{localStorage.setItem("apexBestEt",String(best));}catch(e){} }
+    setCard({title:et.toFixed(2)+" s",col:"#ffc66d",sub:`0–60 ${sixty!=null?sixty.toFixed(2):"—"}s · ${format(trap)} mph · RT ${react!=null?react.toFixed(3):"—"}${race.manual?` · ${perfect}/${shifts} perfect shifts`:""}`,tier:tier(et)+(nb?"  ·  NEW BEST 🏆":"")});
+    setMsg(`${et.toFixed(2)}s @ ${format(trap)} mph — ${tier(et)}${nb?" · NEW PERSONAL BEST 🏆":""}`);
+    beep(660,0.12); clearTimeout(finishBeepTimer); finishBeepTimer=setTimeout(()=>{ if(fsActive && state==="finished") beep(990,0.25); },130);
+    setResults(); updateBtn();
+  }
+  function dragAction(){
+    initAudio();
+    if(state==="idle"||state==="finished"||state==="foul") beginStaging();
+    else if(state==="staging"){ if(stageT<greenAt) foul(); else startRace(stageT-greenAt,false); }
+    else if(state==="racing"&&race.manual) upshift();
+  }
+  // ---------- manual gearbox ----------
+  // Shift quality is judged by engine RPM at the moment you shift. Better timing = shorter power interruption.
+  function upshift(){
+    if(state!=="racing"||!race.manual||gear>=5||shiftT>0) return;
+    const mx=race.c.redline; let q,t,col;
+    if(rpm>=mx-5){ q="LATE"; t=0.22; col="#ff737e"; }
+    else if(rpm>=mx*0.93){ q="PERFECT"; t=0.09; col="#7cf0b2"; }
+    else if(rpm>=mx*0.85){ q="GOOD"; t=0.15; col="#ffc66d"; }
+    else { q="EARLY"; t=0.2; col="#91a2b6"; }
+    gear++; shiftT=t; flameT=0.2; shifts++; if(q==="PERFECT") perfect++;
+    popup={txt:q,col,t:0.8};
+    if(race.c.induction!=="na"&&boostPsi>4) blowoff();
+    beep(q==="PERFECT"?1400:760,0.05,"square");
+  }
+  function downshift(){
+    if(state!=="racing"||!race.manual||gear<=0||shiftT>0) return;
+    const wr=v/RT*GEARS[gear]*race.final*60/(2*Math.PI);
+    if(wr*GEARS[gear-1]/GEARS[gear]>race.c.redline*1.02){ popup={txt:"OVER-REV!",col:"#ff737e",t:0.6}; return; }
+    gear--; shiftT=0.15; flameT=0.12;
+  }
+  function stepRace(dt){
+    const c=race.c, r=race.r, rMax=c.redline;
+    raceT+=dt; if(shiftT>0) shiftT-=dt;
+    const ratio=GEARS[gear]*race.final;
+    const wheelRpm=v/RT*ratio*60/(2*Math.PI);
+    let eRpm=wheelRpm; if(gear===0) eRpm=Math.max(wheelRpm,race.launchRpm);
+    eRpm=clamp(eRpm,1000,rMax); rpm=eRpm;
+    const pt=interpolatePoint(r,eRpm); boostPsi=pt.boostPsi||0;
+    const limiter=eRpm>=rMax-5;
+    let F=(shiftT<=0&&!limiter)?pt.torque*1.35582*ratio*EFF/RT:0;
+    const Ftrac=race.mu*race.mass*9.81*0.75;
+    spin=F>Ftrac; if(spin) F=Ftrac*0.97;
+    const drag=0.5*1.2*0.67*v*v, roll=v>0.1?0.015*race.mass*9.81:0;
+    const a=(F-drag-roll)/(race.mass*(1.04+0.0004*ratio*ratio));
+    v=Math.max(0,v+a*dt); x+=v*dt; accel=a;
+    if(limiter&&(race.manual||gear===5)) flameT=0.06;
+    if(sixty===null&&v>=SIXTY) sixty=raceT;
+    if(!race.manual&&gear<5&&shiftT<=0&&eRpm>=rMax*0.975){ gear++; shiftT=0.2; flameT=0.25; if(c.induction!=="na"&&boostPsi>4) blowoff(); }
+    if(x>=TRACK){ finish((x-TRACK)/Math.max(v,0.1)); return true; }
+    return false;
+  }
+  function freeRev(dt,c){
+    let target=revHeld?c.redline:900;
+    if(limT>0){limT-=dt;target=c.redline*0.9;}
+    rpm+=(target-rpm)*Math.min(1,dt*(revHeld?3.4:2.2));
+    if(revHeld&&rpm>=c.redline-40&&limT<=0) limT=0.075;
+    rpm=clamp(rpm,700,c.redline);
+    const pt=interpolatePoint(simFor(c),Math.max(1000,rpm));
+    boostPsi+=((revHeld?(pt.boostPsi||0)*0.5:0)-boostPsi)*Math.min(1,dt*4);
+  }
+  function update(dt){
+    clock+=dt; if(popup.t>0) popup.t-=dt; if(overlay.t>0) overlay.t-=dt; if(flameT>0) flameT-=dt; if(card&&overlay.t<=0) cardT+=dt;
+    const inRun=state==="staging"||state==="racing"||state==="finished";
+    cfg=inRun?race.c:readConfig();
+    const c=cfg;
+    if(state==="idle"||state==="foul"){ freeRev(dt,c); }
+    else if(state==="staging"){
+      stageT+=dt;
+      const lit=clamp(Math.floor(stageT/0.6),0,3);
+      if(lit>ambersLit){ ambersLit=lit; beep(440,0.1); }
+      if(stageT>=greenAt&&!greenBeeped){ greenBeeped=true; beep(880,0.25); }
+      rpm=race.launchRpm*(1+0.012*Math.sin(clock*38));
+      boostPsi*=Math.pow(0.05,dt);
+      if(stageT>=greenAt+1.5) startRace(1.5,true);
+    }
+    else if(state==="racing"){
+      const n=Math.max(1,Math.ceil(dt/(1/240))), h=dt/n;
+      for(let i=0;i<n;i++){ if(stepRace(h)) break; }
+      if(state==="racing"&&raceT>45){ state="finished"; et=null; setCard({title:"DNF",col:"#ff737e",sub:"Needs more power or less weight",tier:""}); setMsg("DNF — that thing needs more power (or less weight) 😭"); setResults(); updateBtn(); }
+    }
+    else if(state==="finished"){
+      v=Math.max(0,v-11*dt); x+=v*dt; accel=v>0?-11:0; spin=false;
+      const wr=v/RT*GEARS[gear]*race.final*60/(2*Math.PI);
+      rpm+=(clamp(wr,900,c.redline)-rpm)*Math.min(1,dt*3);
+      boostPsi*=Math.pow(0.02,dt);
+    }
+    dispRpm+=(rpm-dispRpm)*Math.min(1,dt*14);
+    tireRot+=(v/RT+(spin?45:0))*dt;
+    if(spin&&state==="racing"&&geo&&particles.length<90){
+      for(let i=0;i<2;i++) particles.push({x:geo.carX-42*geo.s,y:geo.cy-4,vx:-(25+Math.random()*45),vy:-(8+Math.random()*28),life:1,r:6+Math.random()*7});
+    }
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i]; p.x+=p.vx*dt-v*PPM*dt; p.y+=p.vy*dt; p.r+=22*dt; p.life-=dt*0.9;
+      if(p.life<=0) particles.splice(i,1);
+    }
+  }
+
+  // ---------- drawing ----------
+  function skyline(L,off,baseY,color,hs,windows,w){
+    const tot=L.total, o=((off%tot)+tot)%tot, reps=Math.ceil(w/tot)+1;
+    for(let k=0;k<=reps;k++){
+      for(const b of L.arr){
+        const px=b.x-o+k*tot; if(px>w||px+b.w<0) continue;
+        const bh=b.h*hs; cx.fillStyle=color; cx.fillRect(px,baseY-bh,b.w,bh);
+        if(windows){
+          cx.fillStyle="rgba(255,196,110,.55)";
+          let j=0; for(let wy=baseY-bh+6;wy<baseY-8;wy+=9,j++){ let i=0; for(let wx=px+5;wx<px+b.w-6;wx+=8,i++){ if((i*7+j*13+b.win)%5===0) cx.fillRect(wx,wy,3,4); } }
+        }
+      }
+    }
+  }
+  function gauge(gx,gy,R,val,max,major,minor,redFrom,div){
+    const a0=Math.PI*0.75, sw=Math.PI*1.5;
+    cx.save();
+    cx.fillStyle="rgba(8,6,14,.74)"; cx.beginPath(); cx.arc(gx,gy,R+6,0,Math.PI*2); cx.fill();
+    cx.strokeStyle="#3a2930"; cx.lineWidth=2; cx.stroke();
+    if(redFrom!=null){ cx.strokeStyle="#ff303b"; cx.lineWidth=Math.max(2,R*0.09); cx.beginPath(); cx.arc(gx,gy,R*0.9,a0+sw*redFrom/max,a0+sw); cx.stroke(); }
+    cx.fillStyle="#b8c6d6"; cx.textAlign="center"; cx.textBaseline="middle"; cx.font=`${Math.max(8,Math.round(R*0.2))}px "Segoe UI"`;
+    for(let t=0;t<=max+1e-6;t+=minor){
+      const a=a0+sw*t/max, isMajor=Math.abs(t/major-Math.round(t/major))<1e-6, r1=R*0.97, r2=R*(isMajor?0.8:0.88);
+      cx.strokeStyle=isMajor?"#e8f0f8":"#6b7c8e"; cx.lineWidth=isMajor?2:1;
+      cx.beginPath(); cx.moveTo(gx+Math.cos(a)*r1,gy+Math.sin(a)*r1); cx.lineTo(gx+Math.cos(a)*r2,gy+Math.sin(a)*r2); cx.stroke();
+      if(isMajor) cx.fillText(String(Math.round(t/div)),gx+Math.cos(a)*R*0.63,gy+Math.sin(a)*R*0.63);
+    }
+    const na=a0+sw*clamp(val/max,0,1.03);
+    cx.strokeStyle="#ff303b"; cx.lineWidth=Math.max(2,R*0.045); cx.lineCap="round";
+    cx.beginPath(); cx.moveTo(gx-Math.cos(na)*R*0.14,gy-Math.sin(na)*R*0.14); cx.lineTo(gx+Math.cos(na)*R*0.84,gy+Math.sin(na)*R*0.84); cx.stroke();
+    cx.fillStyle="#1b1218"; cx.beginPath(); cx.arc(gx,gy,R*0.11,0,Math.PI*2); cx.fill(); cx.strokeStyle="#ff303b"; cx.lineWidth=1.5; cx.stroke();
+    cx.restore();
+  }
+  function drawCar(px,py,s,color,pitch,shake,hs){
+    cx.save(); cx.translate(px,py+shake); cx.scale(s,s);
+    cx.translate(-42,0); cx.rotate(-pitch); cx.translate(42,0);
+    cx.fillStyle="rgba(0,0,0,.4)"; cx.beginPath(); cx.ellipse(0,1,76,5,0,0,Math.PI*2); cx.fill();
+    // boost underglow
+    if(boostPsi>2){ cx.save(); cx.globalAlpha=clamp(boostPsi/20,0,0.65); cx.fillStyle="#3aa0ff"; cx.shadowColor="#3aa0ff"; cx.shadowBlur=22; cx.fillRect(-58,-5,116,3); cx.restore(); }
+    // exhaust flame
+    if(flameT>0){
+      const len=18+Math.random()*28;
+      cx.fillStyle="#ff8a1f"; cx.beginPath(); cx.moveTo(-70,-19); cx.lineTo(-70-len,-14); cx.lineTo(-70,-9); cx.closePath(); cx.fill();
+      cx.fillStyle="#fff1b0"; cx.beginPath(); cx.moveTo(-70,-17); cx.lineTo(-70-len*0.55,-14); cx.lineTo(-70,-11); cx.closePath(); cx.fill();
+    }
+    // spoiler
+    cx.fillStyle=shade(color,-0.5); cx.fillRect(-72,-44,16,3); cx.fillRect(-67,-41,2.5,10);
+    // body
+    const bg=cx.createLinearGradient(0,-52,0,-8); bg.addColorStop(0,shade(color,0.3)); bg.addColorStop(0.45,color); bg.addColorStop(1,shade(color,-0.55));
+    cx.fillStyle=bg; cx.beginPath();
+    cx.moveTo(-68,-11); cx.lineTo(-69,-27); cx.quadraticCurveTo(-66,-33,-56,-34); cx.lineTo(-34,-36);
+    cx.quadraticCurveTo(-26,-37,-18,-47); cx.lineTo(6,-50); cx.quadraticCurveTo(18,-50,30,-36);
+    cx.lineTo(54,-29); cx.quadraticCurveTo(68,-26,71,-17); cx.lineTo(71,-11); cx.closePath(); cx.fill();
+    cx.strokeStyle="rgba(255,255,255,.2)"; cx.lineWidth=1.2; cx.beginPath(); cx.moveTo(-64,-24); cx.lineTo(62,-22); cx.stroke();
+    // windows
+    const wg=cx.createLinearGradient(0,-48,0,-36); wg.addColorStop(0,"#26364d"); wg.addColorStop(1,"#0a111c");
+    cx.fillStyle=wg; cx.beginPath(); cx.moveTo(-31,-37); cx.quadraticCurveTo(-25,-38,-18,-46); cx.lineTo(5,-48.5); cx.quadraticCurveTo(15,-48.5,25,-37); cx.closePath(); cx.fill();
+    cx.strokeStyle=shade(color,-0.3); cx.lineWidth=2; cx.beginPath(); cx.moveTo(-4,-48); cx.lineTo(-4,-37); cx.stroke();
+    // lights
+    cx.save(); cx.shadowColor="#ff2a3a"; cx.shadowBlur=10; cx.fillStyle="#ff2a3a"; cx.fillRect(-70,-28,3,7); cx.restore();
+    cx.save(); cx.shadowColor="#fff2c0"; cx.shadowBlur=12; cx.fillStyle="#fff7d0"; cx.beginPath(); cx.ellipse(66,-22,4.5,2.4,0,0,Math.PI*2); cx.fill(); cx.restore();
+    // wheel arches
+    cx.save(); cx.beginPath(); cx.rect(-90,-70,180,70); cx.clip();
+    cx.fillStyle="#0a0810"; [-42,44].forEach(wx=>{cx.beginPath(); cx.arc(wx,-13,15.5,0,Math.PI*2); cx.fill();});
+    cx.restore();
+    // wheels
+    [-42,44].forEach(wx=>{
+      cx.fillStyle="#121014"; cx.beginPath(); cx.arc(wx,-13,13,0,Math.PI*2); cx.fill();
+      cx.fillStyle="#c8ccd4"; cx.beginPath(); cx.arc(wx,-13,8.2,0,Math.PI*2); cx.fill();
+      if(v>32){ cx.fillStyle="rgba(150,156,170,.55)"; cx.beginPath(); cx.arc(wx,-13,8.2,0,Math.PI*2); cx.fill(); }
+      else { cx.strokeStyle="#5b6472"; cx.lineWidth=2; for(let k=0;k<5;k++){const a=tireRot+k*Math.PI*2/5; cx.beginPath(); cx.moveTo(wx,-13); cx.lineTo(wx+Math.cos(a)*8,-13+Math.sin(a)*8); cx.stroke();} }
+      cx.fillStyle="#2a2d34"; cx.beginPath(); cx.arc(wx,-13,2.2,0,Math.PI*2); cx.fill();
+    });
+    cx.restore();
+  }
+  function drawTree(px,gy,hs){
+    const bw=30*hs, bh=100*hs, top=gy-88*hs, greenOn=(state==="staging"&&stageT>=greenAt)||(state==="racing"&&raceT<2);
+    cx.fillStyle="#15101a"; cx.fillRect(px-bw/2,top,bw,bh); cx.strokeStyle="#4a3a46"; cx.lineWidth=1.5; cx.strokeRect(px-bw/2,top,bw,bh);
+    const L=[["#ffb020",ambersLit>=1],["#ffb020",ambersLit>=2],["#ffb020",ambersLit>=3],["#35f58a",greenOn],["#ff2a3a",state==="foul"]];
+    L.forEach(([col,on],i)=>{
+      cx.beginPath(); cx.arc(px,top+14*hs+i*17*hs,7*hs,0,Math.PI*2); cx.fillStyle=on?col:"#2a2128";
+      if(on){cx.shadowColor=col;cx.shadowBlur=14;} cx.fill(); cx.shadowBlur=0;
+    });
+  }
+  function draw(){
+    const rect=cv.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+    const cw=Math.max(1,Math.floor(rect.width*dpr)), ch=Math.max(1,Math.floor(rect.height*dpr));
+    if(cv.width!==cw||cv.height!==ch){cv.width=cw;cv.height=ch;}
+    cx.setTransform(dpr,0,0,dpr,0,0);
+    const w=rect.width,h=rect.height; if(w<2||h<2) return;
+    const c=cfg, hs=clamp(Math.min(w/720,h/320),0.6,fsActive?1.7:1.15), gy=h*0.64, cam=x*PPM;
+    const s=clamp(Math.min(w/620,h/300),0.7,fsActive?2.2:1.5), carX=w*0.34, cy=gy+(h-gy)*0.62; geo={carX,cy,s};
+    cx.clearRect(0,0,w,h);
+    // sky
+    const sky=cx.createLinearGradient(0,0,0,gy);
+    sky.addColorStop(0,"#0b0614"); sky.addColorStop(0.55,"#3a0f2e"); sky.addColorStop(0.85,"#a3203a"); sky.addColorStop(1,"#ff6a3d");
+    cx.fillStyle=sky; cx.fillRect(0,0,w,gy+2);
+    stars.forEach(st=>{ const a=(0.35+0.45*Math.sin(clock*1.5+st.p))*(1-st.y*2); cx.fillStyle=`rgba(255,255,255,${Math.max(0,a)})`; cx.fillRect(st.x*w,st.y*gy*1.5,st.s,st.s); });
+    // retro sun
+    const sx=w*0.7, sy=gy*0.74, sr=50*hs;
+    cx.save(); cx.beginPath(); cx.arc(sx,sy,sr,0,Math.PI*2); cx.clip();
+    const sg=cx.createLinearGradient(0,sy-sr,0,sy+sr); sg.addColorStop(0,"#ffe27a"); sg.addColorStop(1,"#ff2f66");
+    cx.fillStyle=sg; cx.fillRect(sx-sr,sy-sr,sr*2,sr*2);
+    cx.fillStyle=sky; for(let k=0;k<6;k++){ cx.fillRect(sx-sr,sy+sr*0.02+k*sr*0.19,sr*2,1.5+k*1.5); }
+    cx.restore();
+    // city
+    skyline(farCity,cam*0.03,gy,"#1c0b24",hs,false,w);
+    skyline(nearCity,cam*0.12,gy,"#110718",hs,true,w);
+    // barrier + lamp posts
+    cx.fillStyle="#0d0a12"; cx.fillRect(0,gy,w,h-gy);
+    const poff=(cam*0.6)%180;
+    for(let i=-1;i<=Math.ceil(w/180)+1;i++){
+      const px=i*180-poff, top=gy-46*hs;
+      cx.fillStyle="#2a2430"; cx.fillRect(px-1,top,2,46*hs);
+      const lg=cx.createRadialGradient(px,top,0,px,top,28*hs); lg.addColorStop(0,"rgba(255,200,120,.45)"); lg.addColorStop(1,"rgba(255,200,120,0)");
+      cx.fillStyle=lg; cx.fillRect(px-30*hs,top-30*hs,60*hs,60*hs);
+      cx.fillStyle="#ffd9a0"; cx.fillRect(px-3,top-1,6,2);
+    }
+    cx.fillStyle="#3a3340"; cx.fillRect(0,gy,w,10*hs);
+    // road
+    const roadTop=gy+10*hs, rd=cx.createLinearGradient(0,roadTop,0,h); rd.addColorStop(0,"#2c2833"); rd.addColorStop(1,"#15121a");
+    cx.fillStyle=rd; cx.fillRect(0,roadTop,w,h-roadTop);
+    cx.fillStyle="rgba(255,255,255,.35)"; cx.fillRect(0,roadTop,w,2);
+    const laneY=roadTop+(h-roadTop)*0.9, doff=(cam%90);
+    cx.fillStyle="rgba(217,210,192,.55)"; for(let px=-doff;px<w;px+=90) cx.fillRect(px,laneY,48,3);
+    cx.fillStyle="rgba(217,210,192,.14)"; for(let px=-(cam*0.9%70);px<w;px+=70) cx.fillRect(px,roadTop+(h-roadTop)*0.2,34,2);
+    // distance markers, start + finish
+    const frontX=carX+66*s, scr=m=>frontX+(m-x)*PPM;
+    cx.font=`${Math.round(10*hs)}px "Segoe UI"`; cx.textAlign="center"; cx.textBaseline="alphabetic";
+    [100,200,300].forEach(m=>{ const px=scr(m); if(px<-20||px>w+20) return; cx.fillStyle="rgba(255,255,255,.18)"; cx.fillRect(px,roadTop,2,h-roadTop); cx.fillStyle="#cfd8e3"; cx.fillText(m+" m",px,gy+8*hs); });
+    const sx0=scr(0); if(sx0>-40&&sx0<w+40){ cx.fillStyle="#f4f4f4"; cx.fillRect(sx0-3,roadTop,6,h-roadTop); drawTree(sx0+60*hs,gy,hs); }
+    const fx=scr(TRACK);
+    if(fx>-60&&fx<w+60){
+      const sq=8; for(let yy=roadTop,r=0;yy<h;yy+=sq,r++){ for(let k=0;k<2;k++){ cx.fillStyle=((r+k)%2)?"#111":"#f4f4f4"; cx.fillRect(fx+k*sq-sq,yy,sq,Math.min(sq,h-yy)); } }
+      cx.fillStyle="#cfd8e3"; cx.fillRect(fx-1,gy-72*hs,3,82*hs);
+      for(let r=0;r<3;r++) for(let k=0;k<5;k++){ cx.fillStyle=((r+k)%2)?"#111":"#f4f4f4"; cx.fillRect(fx+2+k*8*hs,gy-72*hs+r*8*hs,8*hs,8*hs); }
+    }
+    // speed lines
+    if(v>22){
+      const a=clamp((v-22)/70,0,0.4); cx.strokeStyle=`rgba(255,255,255,${a})`; cx.lineWidth=1.2;
+      for(let i=0;i<16;i++){ const yy=gy*0.35+((i*7919)%1000)/1000*(h-gy*0.35), len=40+v*1.2+(i%4)*14, xx=w-((i*263+cam*1.8)%(w+200))+100; cx.beginPath(); cx.moveTo(xx,yy); cx.lineTo(xx+len,yy); cx.stroke(); }
+    }
+    // car
+    const pitch=clamp(accel/14,-0.3,1)*0.035;
+    const shake=Math.sin(clock*70)*0.7*(dispRpm/c.redline)*((state==="idle"||state==="foul")?(revHeld?1.2:0.35):1);
+    drawCar(carX,cy,s,$("dragPaint").value||"#ff303b",pitch,shake,hs);
+    // smoke
+    particles.forEach(p=>{ cx.fillStyle=`rgba(225,225,235,${clamp(p.life,0,1)*0.42})`; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2); cx.fill(); });
+
+    // ---- HUD ----
+    const R=56*hs, tx=16+R, ty=34*hs+R;
+    const tMax=Math.ceil(c.redline/1000)*1000;
+    gauge(tx,ty,R,dispRpm,tMax,1000,500,Math.max(0,c.redline-500),1000);
+    cx.textAlign="center"; cx.textBaseline="middle"; cx.fillStyle="#91a2b6"; cx.font=`${Math.round(R*0.15)}px "Segoe UI"`; cx.fillText("RPM ×1000",tx,ty+R*0.28);
+    const gearTxt=(state==="racing"||state==="finished")?String(gear+1):"N";
+    cx.fillStyle="#e8f0f8"; cx.font=`800 ${Math.round(R*0.42)}px "Segoe UI"`; cx.fillText(gearTxt,tx,ty+R*0.6);
+    if(c.induction!=="na"){
+      const bMax=Math.max(10,Math.ceil(c.boost/5)*5), R2=R*0.6, bx=tx+R+R2+12, by=ty+R*0.22;
+      gauge(bx,by,R2,boostPsi,bMax,5,2.5,null,1);
+      cx.textAlign="center"; cx.fillStyle="#91a2b6"; cx.font=`${Math.round(R2*0.2)}px "Segoe UI"`; cx.fillText("BOOST PSI",bx,by+R2*0.3);
+      cx.fillStyle="#7cf0b2"; cx.font=`700 ${Math.round(R2*0.3)}px "Segoe UI"`; cx.fillText(boostPsi.toFixed(1),bx,by+R2*0.62);
+    }
+    // speed + timer
+    const sp=fsActive?50:0;
+    cx.textAlign="right"; cx.textBaseline="alphabetic";
+    cx.fillStyle="#e8f0f8"; cx.font=`800 ${Math.round(46*hs)}px "Segoe UI"`; cx.fillText(String(Math.round(v*MPH)),w-18,74*hs+sp);
+    cx.fillStyle="#91a2b6"; cx.font=`${Math.round(11*hs)}px "Segoe UI"`; cx.fillText("MPH",w-18,90*hs+sp);
+    cx.fillStyle="#ffc66d"; cx.font=`700 ${Math.round(20*hs)}px "Segoe UI"`;
+    cx.fillText(state==="finished"&&et!=null?et.toFixed(2)+" s":(state==="racing"?raceT.toFixed(2)+" s":"0.00 s"),w-18,118*hs+sp);
+    // shift lights
+    const nL=9, gap=20*hs, lx0=w/2-gap*(nL-1)/2;
+    const frac=clamp((dispRpm-c.redline*0.7)/(c.redline*0.28),0,1), lit=Math.floor(frac*nL+0.001);
+    const blink=dispRpm>=c.redline*((state==="racing"&&race&&race.manual)?0.93:0.965)&&Math.floor(clock*14)%2===0;
+    for(let i=0;i<nL;i++){
+      const on=blink||i<lit, col=blink?"#5db8ff":(i<3?"#7cf0b2":(i<6?"#ffc66d":"#ff303b"));
+      cx.beginPath(); cx.arc(lx0+i*gap,14*hs,5*hs,0,Math.PI*2); cx.fillStyle=on?col:"#241a22";
+      if(on){cx.shadowColor=col;cx.shadowBlur=10;} cx.fill(); cx.shadowBlur=0;
+    }
+    // progress bar
+    cx.fillStyle="rgba(255,255,255,.12)"; cx.fillRect(16,h-10,w-32,4);
+    cx.fillStyle="#ff303b"; cx.fillRect(16,h-10,(w-32)*clamp(x/TRACK,0,1),4);
+    // center prompts / overlay
+    cx.textAlign="center"; cx.textBaseline="middle";
+    let hint="";
+    if(state==="idle") hint=touchDev?"TAP TO STAGE":"PRESS SPACE OR TAP TO STAGE";
+    else if(state==="staging") hint=stageT>=greenAt?"GO! GO! GO!":"WAIT FOR GREEN…";
+    else if(state==="racing"&&race&&race.manual&&gear===0&&raceT<2.8&&rpm<c.redline*0.93) hint=touchDev?"TAP TO SHIFT WHEN LIGHTS GO BLUE":"SHIFT WHEN THE LIGHTS GO BLUE";
+    if(hint){ cx.globalAlpha=0.65+0.35*Math.sin(clock*5); cx.fillStyle=(state==="staging"&&stageT>=greenAt)?"#7cf0b2":"#ffffff"; cx.font=`800 ${Math.round((state==="staging"&&stageT>=greenAt?34:16)*hs)}px "Segoe UI"`; cx.fillText(hint,w*0.5,gy*0.52+(state==="staging"?10*hs:0)); cx.globalAlpha=1; }
+    if(overlay.t>0){
+      cx.globalAlpha=clamp(overlay.t/0.4,0,1); cx.fillStyle=overlay.col; cx.shadowColor=overlay.col; cx.shadowBlur=22;
+      cx.font=`900 ${Math.round(54*hs)}px "Segoe UI"`; cx.fillText(overlay.txt,w*0.5,gy*0.5); cx.shadowBlur=0; cx.globalAlpha=1;
+    }
+    // manual shift prompt + shift quality popup
+    if(state==="racing"&&race&&race.manual&&shiftT<=0&&gear<5&&rpm>=c.redline*0.93&&Math.floor(clock*12)%2===0){
+      cx.textAlign="center"; cx.textBaseline="middle"; cx.fillStyle="#5db8ff"; cx.shadowColor="#5db8ff"; cx.shadowBlur=18;
+      cx.font=`900 ${Math.round(40*hs)}px "Segoe UI"`; cx.fillText("SHIFT!",w*0.5,gy*0.5); cx.shadowBlur=0;
+    }
+    if(popup.t>0){
+      cx.textAlign="center"; cx.textBaseline="middle"; cx.globalAlpha=clamp(popup.t/0.3,0,1);
+      cx.fillStyle=popup.col; cx.shadowColor=popup.col; cx.shadowBlur=16; cx.font=`900 ${Math.round(28*hs)}px "Segoe UI"`;
+      cx.fillText(popup.txt,carX,cy-92*s-(0.8-popup.t)*34); cx.shadowBlur=0; cx.globalAlpha=1;
+    }
+    // result card
+    if(card&&overlay.t<=0&&(state==="finished"||state==="foul")){
+      const k=clamp(cardT/0.28,0,1), e=1-Math.pow(1-k,3), sc=0.85+0.15*e;
+      const cwd=Math.min(w*0.62,330*hs), chd=122*hs, ccx=w*0.5, ccy=gy*0.5+8*hs;
+      cx.save(); cx.globalAlpha=e; cx.translate(ccx,ccy); cx.scale(sc,sc);
+      const x0=-cwd/2,y0=-chd/2,r=12*hs;
+      cx.fillStyle="rgba(8,6,14,.86)"; cx.beginPath(); cx.moveTo(x0+r,y0); cx.lineTo(x0+cwd-r,y0); cx.quadraticCurveTo(x0+cwd,y0,x0+cwd,y0+r); cx.lineTo(x0+cwd,y0+chd-r); cx.quadraticCurveTo(x0+cwd,y0+chd,x0+cwd-r,y0+chd); cx.lineTo(x0+r,y0+chd); cx.quadraticCurveTo(x0,y0+chd,x0,y0+chd-r); cx.lineTo(x0,y0+r); cx.quadraticCurveTo(x0,y0,x0+r,y0); cx.closePath(); cx.fill();
+      cx.strokeStyle=card.col; cx.lineWidth=1.5; cx.stroke();
+      cx.textAlign="center"; cx.textBaseline="middle";
+      cx.fillStyle=card.col; cx.shadowColor=card.col; cx.shadowBlur=14; cx.font=`900 ${Math.round(38*hs)}px "Segoe UI"`; cx.fillText(card.title,0,y0+30*hs); cx.shadowBlur=0;
+      cx.fillStyle="#e8f0f8"; cx.font=`600 ${Math.round(12*hs)}px "Segoe UI"`; cx.fillText(card.sub,0,y0+62*hs);
+      if(card.tier){ cx.fillStyle="#7cf0b2"; cx.font=`800 ${Math.round(14*hs)}px "Segoe UI"`; cx.fillText(card.tier,0,y0+84*hs); }
+      cx.fillStyle="#91a2b6"; cx.font=`${Math.round(10*hs)}px "Segoe UI"`; cx.fillText(touchDev?"TAP TO RUN IT BACK":"SPACE / TAP TO RUN IT BACK",0,y0+106*hs);
+      cx.restore();
+    }
+  }
+
+  // ---------- input ----------
+  $("dragLaunchBtn").addEventListener("click",dragAction);
+  cv.addEventListener("pointerdown",e=>{e.preventDefault();dragAction();});
+  const revBtn=$("dragRevBtn");
+  revBtn.addEventListener("pointerdown",e=>{e.preventDefault();initAudio();revHeld=true;});
+  ["pointerup","pointerleave","pointercancel"].forEach(ev=>revBtn.addEventListener(ev,()=>{revHeld=false;}));
+  function toggleSound(){
+    initAudio(); soundOn=!soundOn;
+    $("dragSoundBtn").textContent=soundOn?"🔊 SOUND ON":"🔇 SOUND OFF";
+    $("fsSnd").textContent=soundOn?"🔊":"🔇";
+  }
+  $("dragSoundBtn").addEventListener("click",toggleSound);
+
+  // ---------- fullscreen / mobile game mode ----------
+  const wrap=$("dragWrap"), isNativeFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  function enterFs(){
+    initAudio();
+    fsActive=true; wrap.classList.add("fs"); document.body.classList.add("fs-lock");
+    lastTs=0;
+    if(dragFrameId===null) dragFrameId=requestAnimationFrame(frame);
+    const rq=wrap.requestFullscreen||wrap.webkitRequestFullscreen;
+    if(rq){
+      try{
+        const p=rq.call(wrap);
+        const lock=()=>{ try{ const o=screen.orientation; if(o&&o.lock) o.lock("landscape").catch(()=>{}); }catch(e){} };
+        if(p&&p.then) p.then(lock).catch(()=>{}); else lock();
+      }catch(e){}
+    }
+    window.scrollTo(0,wrap.getBoundingClientRect().top+window.scrollY);
+  }
+  function stopDragRace(){
+    // End the race itself, not merely the fullscreen presentation.
+    clearTimeout(finishBeepTimer); finishBeepTimer=null;
+    revHeld=false;
+    state="idle"; race=null;
+    stageT=0; raceT=0; x=0; v=0; accel=0; gear=0; shiftT=0;
+    rpm=900; dispRpm=900; boostPsi=0; spin=false; limT=0;
+    flameT=0; particles.length=0;
+    overlay={txt:"",col:"#fff",t:0}; popup={txt:"",col:"#fff",t:0};
+    card=null; cardT=0; sixty=null; et=null; trap=null; react=null;
+    // Closing the context terminates engine audio and any one-shot sound nodes.
+    if(AC){ try{ AC.close(); }catch(e){} }
+    AC=null; au=null;
+    if(typeof dragFrameId!=="undefined" && dragFrameId!==null){
+      cancelAnimationFrame(dragFrameId);
+      dragFrameId=null;
+    }
+    lastTs=0;
+  }
+  function exitFs(){
+    if(!fsActive) return;
+    stopDragRace();
+    fsActive=false; wrap.classList.remove("fs"); document.body.classList.remove("fs-lock"); $("fsTune").hidden=true;
+    try{ if(isNativeFs()) (document.exitFullscreen||document.webkitExitFullscreen).call(document); }catch(e){}
+    try{ const o=screen.orientation; if(o&&o.unlock) o.unlock(); }catch(e){}
+    wrap.scrollIntoView({block:"center"});
+  }
+  const toggleFs=()=>fsActive?exitFs():enterFs();
+  ["fullscreenchange","webkitfullscreenchange"].forEach(ev=>document.addEventListener(ev,()=>{ if(fsActive&&!isNativeFs()) exitFs(); }));
+  $("dragFsBtn").addEventListener("click",toggleFs);
+  $("playFab").addEventListener("click",enterFs);
+  $("fsExit").addEventListener("click",exitFs);
+  $("fsSnd").addEventListener("click",toggleSound);
+  // big touch buttons: react on pointerdown so launches feel instant
+  $("fsGo").addEventListener("pointerdown",e=>{e.preventDefault();dragAction();});
+  $("fsDown").addEventListener("pointerdown",e=>{e.preventDefault();downshift();});
+  $("dragTrans").addEventListener("change",updateBtn);
+  const fsRev=$("fsRev");
+  fsRev.addEventListener("pointerdown",e=>{e.preventDefault();initAudio();revHeld=true;});
+  ["pointerup","pointerleave","pointercancel"].forEach(ev=>fsRev.addEventListener(ev,()=>{revHeld=false;}));
+  // in-game tuning drawer (mirrors the main controls)
+  const ctl={gear:$("dragGear"),tires:$("dragTires"),weight:$("dragWeight"),paint:$("dragPaint")};
+  $("fsTuneBtn").addEventListener("click",()=>{
+    const t=$("fsTune"); if(!t.hidden){ t.hidden=true; return; }
+    $("fsPreset").innerHTML=$("presetSelect").innerHTML; $("fsPreset").value="";
+    $("fsGearSel").value=ctl.gear.value; $("fsTiresSel").value=ctl.tires.value; $("fsPaintIn").value=ctl.paint.value; $("fsTransSel").value=$("dragTrans").value;
+    $("fsWeightIn").value=ctl.weight.value; $("fsWeightOut").textContent=format(Number(ctl.weight.value))+" lb";
+    t.hidden=false;
+  });
+  $("fsTuneClose").addEventListener("click",()=>{$("fsTune").hidden=true;});
+  $("fsPreset").addEventListener("change",e=>{ if(e.target.value) loadPresetById(e.target.value); });
+  $("fsGearSel").addEventListener("change",e=>{ctl.gear.value=e.target.value;});
+  $("fsTiresSel").addEventListener("change",e=>{ctl.tires.value=e.target.value;});
+  $("fsTransSel").addEventListener("change",e=>{$("dragTrans").value=e.target.value; updateBtn();});
+  $("fsPaintIn").addEventListener("input",e=>{ctl.paint.value=e.target.value;});
+  $("fsWeightIn").addEventListener("input",e=>{ctl.weight.value=e.target.value; ctl.weight.dispatchEvent(new Event("input")); $("fsWeightOut").textContent=format(Number(e.target.value))+" lb";});
+  $("dragWeight").addEventListener("input",()=>{$("dragWeightOut").textContent=format(Number($("dragWeight").value))+" lb";});
+  const typing=t=>t&&t.matches&&t.matches("input[type=text],input[type=number],textarea,select");
+  document.addEventListener("keydown",e=>{
+    if(!fsActive || typing(e.target)) return;
+    if(e.code==="Space"){ if(e.target.tagName==="BUTTON") return; e.preventDefault(); if(!e.repeat) dragAction(); }
+    else if(e.code==="KeyR"){ initAudio(); revHeld=true; }
+    else if((e.code==="ArrowUp"||e.code==="KeyE")&&state==="racing"&&race.manual){ e.preventDefault(); if(!e.repeat) upshift(); }
+    else if((e.code==="ArrowDown"||e.code==="KeyQ")&&state==="racing"&&race.manual){ e.preventDefault(); if(!e.repeat) downshift(); }
+    else if(e.code==="KeyF"&&!e.repeat){ toggleFs(); }
+    else if(e.code==="Escape"&&fsActive){ exitFs(); }
+  });
+  document.addEventListener("keyup",e=>{ if(e.code==="KeyR") revHeld=false; });
+  window.addEventListener("blur",()=>{revHeld=false;});
+
+  // ---------- loop ----------
+  let dragFrameId=null;
+  function frame(ts){
+    if(!fsActive){ dragFrameId=null; return; }
+    const dt=Math.min(0.05,Math.max(0,(ts-(lastTs||ts))/1000)); lastTs=ts;
+    update(dt); draw(); updateAudio();
+    dragFrameId=requestAnimationFrame(frame);
+  }
+  setResults(); updateBtn();
+})();
+</script>
+</body>
+</html>
